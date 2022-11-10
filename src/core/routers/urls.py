@@ -18,7 +18,7 @@ urlpatterns = [
     path('afterlogin', views.afterlogin_view, name='afterlogin'),
 
     path('adminlogin',
-         LoginView.as_view(template_name='insurance/adminlogin.html'),
+         LoginView.as_view(template_name='admin/adminlogin.html'),
          name='adminlogin'),
     path('admin-dashboard',
          views.admin_dashboard_view,
