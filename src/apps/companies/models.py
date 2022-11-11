@@ -2,10 +2,11 @@ from django.db import models
 from django.utils import timezone
 
 from apps import helpers
+from apps.users.models import User
 
 
 class Company(models.Model):
-    user = models.OneToOneField('User', related_name='company', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='company', on_delete=models.CASCADE)
     name = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     contact = models.CharField(max_length=50, unique=True)
