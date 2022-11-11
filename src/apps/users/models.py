@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser, Group, UserManager
 # Create your models here.
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4())
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     email = models.EmailField(max_length=254, unique=True)
     username = models.CharField(
         max_length=254, null=True, blank=True, unique=True

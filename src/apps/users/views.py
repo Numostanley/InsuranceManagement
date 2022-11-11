@@ -1,9 +1,8 @@
 import uuid
-from _ast import mod
 from typing import Tuple
 import re
 
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from apps.users.models import User
@@ -55,7 +54,7 @@ def register(request):
 
 
 def list(request):
-    users= User.objects.exclude(is_superuser=True).defer("password").all()
+    users = User.objects.exclude(is_superuser=True).defer("password").all()
     return render(request, "user/user-list.html", context={'users': users})
 
 
