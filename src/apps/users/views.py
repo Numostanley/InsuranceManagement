@@ -6,9 +6,9 @@ import re
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
-from src.apps.users.models import User
+from apps.users.models import User
 from django.contrib.auth.models import Group
-from src.apps.users.dto import RegisterUser, UpdateUser
+from apps.users.dto import RegisterUser, UpdateUser
 
 # Group Names
 ADMIN = "Admin"

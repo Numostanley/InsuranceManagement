@@ -1,5 +1,5 @@
 from django.urls import path
-from src.apps.users.views import index, register, signin, signout, list, update
+from apps.users.views import index, register, signin, signout, list, update
 
 urlpatterns = [
     path("", index, name="index"),
