@@ -41,11 +41,3 @@ class PolicyRecord(BaseModel):
         return self.policy.name
 
 
-class Question(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.CharField(max_length=500)
-    comment = models.CharField(max_length=200, default='Nothing')
-    asked_date = models.DateField(auto_now=True)
-
-    def __str__(self):
-        return self.description

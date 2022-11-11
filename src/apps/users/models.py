@@ -25,6 +25,12 @@ class User(AbstractUser):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["email"]
 
+    def __str__(self):
+        return f"{self.last_name} {self.first_name}"
+
     @property
     def get_name(self):
         return self.first_name + " " + self.last_name
+
+    def get_group_name(self):
+        return self.group.name
