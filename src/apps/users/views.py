@@ -119,7 +119,7 @@ def add_user_to_group(user: User, group: str):
     user.save()
 
 
-def _get_attribute_from_request_reg(request) -> Tuple[bool, RegisterUser] | Tuple[bool, str]:
+def _get_attribute_from_request_reg(request) -> Tuple[bool, RegisterUser] or Tuple[bool, str]:
     model = RegisterUser()
     # get required fields and validate
     model.email = request.POST.get("email", None)
