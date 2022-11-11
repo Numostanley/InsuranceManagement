@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     "apps.companies",
     "apps.insurances",
+    "apps.main",
     "apps.reviews",
     "apps.users"
 ]
