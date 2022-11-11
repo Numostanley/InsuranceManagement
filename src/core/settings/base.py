@@ -15,7 +15,7 @@ from pathlib import Path
 from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 TEMPLATE_DIR = BASE_DIR / 'apps/templates'
 STATIC_DIR = BASE_DIR / 'apps/static'
@@ -61,6 +61,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "apps.insurances",
+    "apps.reviews",
+    "apps.users"
 ]
 
 MIDDLEWARE = [
