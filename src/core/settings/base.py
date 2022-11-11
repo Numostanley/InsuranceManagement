@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "apps.companies",
     "apps.insurances",
+    "apps.main",
     "apps.reviews",
     "apps.users"
 ]
