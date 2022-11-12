@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">
+            Yes
+        </button>
+        <a href="{% url 'companies:detail' company.id %}" class="btn btn-primary">
+            No
+        </a>
+    </form>
+{% endblock %}

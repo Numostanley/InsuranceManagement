@@ -44,7 +44,31 @@ class Company(models.Model):
             return None
 
     @staticmethod
-    def delete_company_by_id(id):
+    def get_company_by_email(email: str):
+        """retrieve company by email"""
+        try:
+            return Company.objects.get(email=email)
+        except Company.DoesNotExist:
+            return None
+
+    @staticmethod
+    def get_company_by_website(website: str):
+        """retrieve company by website"""
+        try:
+            return Company.objects.get(website=website)
+        except Company.DoesNotExist:
+            return None
+
+    @staticmethod
+    def get_company_by_contact(contact: str):
+        """retrieve company by contact"""
+        try:
+            return Company.objects.get(contaxt=contact)
+        except Company.DoesNotExist:
+            return None
+
+    @staticmethod
+    def delete_company_by_id(id: str):
         """retrieve company by name"""
         try:
             company = Company.get_company_by_id(id)

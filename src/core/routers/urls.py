@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("apps.main.urls", namespace="main")),
     path("companies/", include("apps.companies.urls", namespace="companies")),
+    path("insurances/", include("apps.insurances.urls", namespace="insurances"))
 ]

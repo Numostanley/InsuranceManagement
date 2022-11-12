@@ -65,7 +65,9 @@ INSTALLED_APPS = [
     "apps.insurances",
     "apps.main",
     "apps.reviews",
-    "apps.users"
+    "apps.users",
+    "crispy_forms",
+    "crispy_bootstrap5"
 ]
 
 MIDDLEWARE = [
@@ -165,6 +167,10 @@ LOGIN_REDIRECT_URL='/afterlogin'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Crispy Settings
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
