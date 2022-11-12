@@ -51,6 +51,7 @@ DEBUG = env_config['DEBUG']
 
 ALLOWED_HOSTS = []
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -65,7 +66,9 @@ INSTALLED_APPS = [
     "apps.insurances",
     "apps.main",
     "apps.reviews",
-    "apps.users"
+    "apps.users",
+    "crispy_forms",
+    "crispy_bootstrap5"
 ]
 
 MIDDLEWARE = [
@@ -98,6 +101,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.sgi.wsgi.application"
 
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -107,6 +111,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -125,6 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -162,6 +168,12 @@ LOGIN_REDIRECT_URL = '/afterlogin'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Crispy Settings
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True

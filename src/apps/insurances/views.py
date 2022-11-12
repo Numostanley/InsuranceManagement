@@ -31,14 +31,3 @@ def user_policy_records(request):
         'title': f'{request.user.username} Policy Records'
     }
     return render(request, 'insurances/user_policy_records.html', context)
-
-
-@login_required
-def user_policy_record_detail(request, id):
-    policy_record = PolicyRecord.get_user_policy_record(request.user, id)
-
-    context = {
-        'policy_record': policy_record,
-        'title': f'Policy Record {policy_record.id}'
-    }
-    return render(request, '', context)
