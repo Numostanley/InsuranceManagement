@@ -146,4 +146,4 @@ dump.rdb
 # coverage bash files
 
 codecov.sh
-coverage-vulnscan.bash
+deploy.sh
