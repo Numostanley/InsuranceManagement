@@ -1,5 +1,6 @@
 from django.urls import path
-from apps.users.views import register, signin, signout, list, update, customer_dashboard, admin_dashboard
+from apps.users.views import register, signin, signout, list, update, customer_dashboard, admin_dashboard, \
+    company_dashboard
 
 app_name = 'users'
 
@@ -10,5 +11,6 @@ urlpatterns = [
     path('list', list, name="user-list"),
     path('update/<uuid:pk>', update, name='user-update'),
     path("customer-dashboard", customer_dashboard, name="customer-dashboard"),
-    path("admin-app-dashboard", admin_dashboard, name="admin-dashboard"),
+    path("admin-dashboard", admin_dashboard, name="admin-dashboard"),
+    path("company-dashboard", company_dashboard, name="company-dashboard"),
 ]

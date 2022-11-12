@@ -5,7 +5,7 @@ from apps.users.models import User
 
 
 class Company(models.Model):
-    user = models.OneToOneField(User, related_name='company', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='company', on_delete=models.CASCADE, default=None, null=True)
     name = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     contact = models.CharField(max_length=50, unique=True)
@@ -62,7 +62,7 @@ class Company(models.Model):
     def get_company_by_contact(contact: str):
         """retrieve company by contact"""
         try:
-            return Company.objects.get(contaxt=contact)
+            return Company.objects.get(contact=contact)
         except Company.DoesNotExist:
             return None
 

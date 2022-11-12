@@ -13,18 +13,18 @@ def create(request, policy_id: UUID):
     policy_record.policy_id = policy_id
     policy_record.user_id = user_id
     policy_record.save()
-    return redirect(list)
+    return redirect("insurances:polices:apply")
 
 
 @authorize([COMPANY_USER])
-def update(request, record_id: UUID, status: str):
+def update(request, id: UUID, status: str):
     try:
-        policy_record = PolicyRecord.objects.get(id=record_id)
+        policy_record = PolicyRecord.objects.get(id=id)
         policy_record.status = status
         policy_record.save()
-        return render(request, "", {})
+        return redirect("insurances:records:list", status="All")
     except (PolicyRecord.DoesNotExist, PolicyRecord.MultipleObjectsReturned) as e:
-        return render(request, "", {})
+        return redirect("insurances:records:list")
 
 
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
@@ -38,8 +38,8 @@ def list(request, status: str):
         records.filter(status=status)
     if group_name == COMPANY_USER:
         company_id = request.user.company.id
-        records.filter(company_id=company_id)
-        base_template = "companies/base.html"
+        records.filter(policy__company_id=company_id)
+        base_template = "companies/comp-base.html"
     if group_name == CUSTOMER:
         records.filter(user__id=request.user.id)
         base_template = "customer/base.html"

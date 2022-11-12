@@ -1,4 +1,4 @@
-{% extends 'admin-app/base.html' %}
+{% extends base_template %}
 {% block content %}
     {% load static %}
 
@@ -34,7 +34,9 @@
                     <th>Serial No.</th>
                     <th>Category Name</th>
                     <th> Creation Date</th>
-                    <th>Update</th>
+                    {% if group == 'Admin' %}
+                        <th>Update</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 {% for category in categories %}
@@ -42,7 +44,11 @@
                         <td> {{ forloop.counter }}</td>
                         <td> {{ category.name }}</td>
                         <td>{{ category.creation_date }}</td>
-                        <td><a class="btn btn-danger btn-xs" href="{% url 'insurances:categories:update' category.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                        {% if group == 'Admin' %}
+                            <td><a class="btn btn-danger btn-xs"
+                                   href="{% url 'insurances:categories:update' category.id %}"><span
+                                    class="glyphicon glyphicon-edit"></span></a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </table>

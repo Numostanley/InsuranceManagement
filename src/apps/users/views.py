@@ -4,7 +4,7 @@ import re
 
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from apps.users.models import User
 from apps.insurances.models import Policy, PolicyRecord, Category
 from django.contrib.auth.models import Group
@@ -27,6 +27,18 @@ def customer_dashboard(request):
     return render(request, "customer/dashboard.html", context)
 
 
+def company_dashboard(request):
+    context = {
+        "total_policies": Policy.objects.all().count(),
+        "total_categories": Category.objects.all().count(),
+        "total_applied": PolicyRecord.objects.all().count(),
+        "total_approved": PolicyRecord.objects.filter(status="Approved").count(),
+        "total_rejected": PolicyRecord.objects.filter(status="Rejected").count(),
+        "total_pending": PolicyRecord.objects.filter(status="Pending").count()
+    }
+    return render(request, "companies/dashboard.html", context)
+
+
 def admin_dashboard(request):
     context = {
         "total_users": User.objects.all().count(),
@@ -43,34 +55,23 @@ def admin_dashboard(request):
 
 def register(request):
     if request.method == "POST":
-        is_valid, data = _get_attribute_from_request_reg(request)
+        is_valid, message = _validate(request)
         if not is_valid:
-            return render(request, "user/siginup.html", {})
-        is_valid, message = _validate_password(data.password, data.confirm_password)
-        if not is_valid:
-            return render(request, "user/siginup.html", {})
-        is_email_exits = _check_if_exit(is_email=True, email=data.email)
-        is_username_exits = _check_if_exit(is_username=True, username=data.username)
-        if is_username_exits or is_email_exits:
-            return render(request, "user/siginup.html", {})
-        # create user
-        user = User()
-        user.id = uuid.uuid4()
-        user.first_name = data.first_name
-        user.last_name = data.last_name
-        user.email = data.email
-        user.username = data.username
-        user.location = data.location
-        user.password = make_password(password=data.password)
-        user.phone_number = data.phone_number
-        user.image = request.FILES.get("image", None)
-        user.save()
-
-        # assign user to group
-        add_user_to_group(user, data.group)
-
-        return render(request, "user/siginup.html", {})
-    return render(request, "user/siginup.html", {})
+            return render(request, "user/siginup.html", {"message": message})
+        user = _save(message, request.FILES.get("image", None))
+        company_id = request.POST.get("company_id", None)
+        if company_id:
+            company = Company.get_company_by_id(company_id)
+            company.user = user
+            company.save()
+        return redirect("users:sign-in")
+    group: str = request.GET.get("group", "")
+    company_id = request.GET.get("company_id", "")
+    if group.lower() == COMPANY_USER.lower():
+        return render(request, "companies/company-user.html", {"group": COMPANY_USER, "company_id": company_id})
+    if group.lower() == RISK_ACCESSOR.lower():
+        return render(request, "user/siginup.html", {"group": RISK_ACCESSOR})
+    return render(request, "user/siginup.html", {"group": CUSTOMER})
 
 
 def list(request):
@@ -87,13 +88,13 @@ def signin(request):
     if user:
         login(request, user)
         if user.is_superuser:
-            return render(request, "admin-app/dashboard.html", {})
-        elif user.group.name == ADMIN or user.is_superuser:
-            return render(request, "admin-app/dashboard.html", {})
+            return redirect("users:admin-dashboard")
+        elif user.group.name == ADMIN:
+            return redirect("users:admin-dashboard")
         elif user.group.name == COMPANY_USER:
-            ...
+            return redirect("users:company-dashboard")
         elif user.group.name == CUSTOMER:
-            return render(request, "customer/dashboard.html", {})
+            return redirect("users:customer-dashboard")
         elif user.group.name == RISK_ACCESSOR:
             ...
     return render(request, "user/signin.html", {"message": "Username or Password Incorrect"})
@@ -142,7 +143,42 @@ def add_user_to_group(user: User, group: str):
     user.save()
 
 
-def _get_attribute_from_request_reg(request) -> Tuple[bool, RegisterUser] or Tuple[bool, str]:
+def _save(data: RegisterUser, file) -> User:
+    user = User()
+    user.id = uuid.uuid4()
+    user.first_name = data.first_name
+    user.last_name = data.last_name
+    user.email = data.email
+    user.username = data.username
+    user.location = data.location
+    user.password = make_password(password=data.password)
+    user.phone_number = data.phone_number
+    user.image = file
+    user.save()
+
+    # assign user to group
+    add_user_to_group(user, data.group)
+    return user
+
+
+def _validate(request) -> Tuple[bool, str] or Tuple[bool, RegisterUser]:
+    is_valid, data = _get_attribute_from_request_reg(request)
+    if not is_valid:
+        return False, "Ensure you fill all data"
+    is_valid, message = _validate_password(data.password, data.confirm_password)
+    if not is_valid:
+        return False, message
+    is_email_exits = _check_if_exit(is_email=True, email=data.email)
+    is_username_exits = _check_if_exit(is_username=True, username=data.username)
+    if is_username_exits or is_email_exits:
+        return False, "Username or email already exit"
+    return True, data
+
+
+def _get_attribute_from_request_reg(request) -> Tuple[
+                                                    bool, RegisterUser] or \
+                                                Tuple[
+                                                    bool, str]:
     model = RegisterUser()
     # get required fields and validate
     model.email = request.POST.get("email", None)
@@ -155,7 +191,7 @@ def _get_attribute_from_request_reg(request) -> Tuple[bool, RegisterUser] or Tup
     model.last_name = request.POST.get("last_name", "")
     model.location = request.POST.get("location", "")
     model.phone_number = request.POST.get("phone_number", "")
-    model.group = request.POST.get("role", "Customer")
+    model.group = request.POST.get("group", CUSTOMER)
     return True, model
 
 
