@@ -20,10 +20,12 @@ def authorize(group_names: list):
     def wrapper_func(func):
         @wraps(func)
         def wrapper(request, *args, **kwargs):
-            groups = Group.objects.filter(name__in=group_names)
+            if request.user.is_superuser:
+                return func(request, *args, **kwargs)
+            groups_name = [group.name for group in Group.objects.filter(name__in=group_names).only("name")]
             user: User = request.user
             user_group = user.get_group_name()
-            if user_group in groups:
+            if user_group in groups_name:
                 return func(request, *args, **kwargs)
             return render(request, "403.html", {})
 

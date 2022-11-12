@@ -14,12 +14,12 @@
     <title>Sign Up</title>
 </head>
 <body>
-{% include "navbar.html" %}
+{% include "includes/navbar.html" %}
 
 
 <br><br><br>
 <h3 style="text-align: center;color: red;">SIGNUP</h3>
-<form method="POST" autocomplete="off" enctype="multipart/form-data" action="{% url 'sign-up' %}">
+<form method="POST" autocomplete="off" enctype="multipart/form-data" action="{% url 'users:sign-up' %}">
     {% csrf_token %}
     <div class="form-row">
         <div class="form-group col-md-6">

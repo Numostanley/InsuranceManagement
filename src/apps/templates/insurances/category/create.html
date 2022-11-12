@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin-app/base.html' %}
 {% load widget_tweaks %}
 {% block content %}
     <head>
@@ -18,14 +18,24 @@
         </style>
     </head>
     <h2 style="text-align:center; color:blue;">ADD CATEGORY</h2>
-    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;" action="{% url 'category-create' %}">
-        {% csrf_token %}
-        <label for="name">Category Name</label>
-        <input name="name" id="name" type="text" value="{{ category.name }}">
+    <div class="container">
+        <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;"
+              action="{% url 'insurances:categories:create' %}">
+            {% csrf_token %}
+            {% if message %}
+                <div class="container">
+                    <span class="alert alert-danger">{{ message }}</span>
+                </div>
+            {% endif %}
+
+            <label for="name">Category Name</label>
+            <input name="name" id="name" type="text">
 
 
-        <br>
-        <button type="submit" class="btn btn-primary">ADD</button>
-    </form>
+            <br>
+            <button type="submit" class="btn btn-primary">ADD</button>
+        </form>
+    </div>
+
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock content %}

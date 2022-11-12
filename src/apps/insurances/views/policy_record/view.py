@@ -31,7 +31,7 @@ def update(request, record_id: UUID, status: str):
 def list(request, status: str):
     user: User = request.user
     group_name = user.get_group_name()
-    base_template = "admin/base.html"
+    base_template = "admin-app/base.html"
     records = PolicyRecord.objects.only("policy", "status",
                                         "user", "creation_date", "id")
     if not status.lower() == "All".lower():
@@ -39,10 +39,10 @@ def list(request, status: str):
     if group_name == COMPANY_USER:
         company_id = request.user.company.id
         records.filter(company_id=company_id)
-        base_template = "companies/bast.html"
+        base_template = "companies/base.html"
     if group_name == CUSTOMER:
         records.filter(user__id=request.user.id)
-        base_template = "customer/bast.html"
+        base_template = "customer/base.html"
     page = "insurances/policy_record/view-all.html" if status.lower() == "All".lower() \
         else "insurances/policy_record/list-status.html"
     return render(request, page,

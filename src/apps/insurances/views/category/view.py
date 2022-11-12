@@ -6,6 +6,11 @@ from apps.users.views import ADMIN, COMPANY_USER
 
 
 @authorize([ADMIN])
+def home(request):
+    return render(request, "insurances/category/home.html", {})
+
+
+@authorize([ADMIN])
 def create(request):
     if request.method == "GET":
         return render(request, "insurances/category/create.html", {})
@@ -16,7 +21,7 @@ def create(request):
         return render(request, "insurances/category/create.html",
                       {"message": f"Category with name {name} already exits"})
     Category.objects.create(name=name)
-    return render(request, "insurances/category/create.html", {"message" : "Created"})
+    return redirect("insurances:categories:list")
 
 
 @authorize([ADMIN])
@@ -26,8 +31,9 @@ def update(request, id: UUID):
         if request.method == "GET":
             return render(request, "insurances/category/update.html", {"category": category})
         name = request.POST.get("name", category.name)
-        category.objects.update(name=name)
-        return redirect(list)
+        category.name = name
+        category.save()
+        return redirect("insurances:categories:list")
     except (Category.DoesNotExist, Category.MultipleObjectsReturned) as e:
         return render(request, "insurances/category/view.html", {"message": "category not found"})
 

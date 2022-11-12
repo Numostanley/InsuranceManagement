@@ -169,7 +169,7 @@
         <h3>Insurance Management</h3>
     </div>
     <div class="right_area">
-        <a href="{% url 'sign-out' %}" class="logout_btn">Logout</a>
+        <a href="{% url 'users:sign-out' %}" class="logout_btn">Logout</a>
     </div>
 </header>
 <!--header area end-->
@@ -179,16 +179,15 @@
 ">
     <center>
 
-        <img src="{% static "image/admin.png" %}" class="profile_image" alt="">
+        <img src="{% static "image/admin-app.png" %}" class="profile_image" alt="">
         <h4>Admin</h4>
 
     </center>
 
-    <a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="{% url 'user-list' %}"><i class="fas fa-users"></i><span>Users</span></a>
-    <a href="/admin-category"><i class="fas fa-list-alt"></i><span>Category</span></a>
-    <a href="/admin-policy"><i class="fab fa-product-hunt"></i><span>Policy</span></a>
-    <a href="/admin-question"><i class="fas fa-question-circle"></i><span>Questions</span></a>
+    <a href="{% url 'users:admin-dashboard' %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+    <a href="{% url 'users:user-list' %}"><i class="fas fa-users"></i><span>Users</span></a>
+    <a href="{% url 'insurances:categories:home' %}"><i class="fas fa-list-alt"></i><span>Category</span></a>
+    <a href="{% url 'insurances:polices:home' %}"><i class="fab fa-product-hunt"></i><span>Policy</span></a>
 
 
 </div>

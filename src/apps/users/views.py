@@ -2,12 +2,14 @@ import uuid
 from typing import Tuple
 import re
 
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from apps.users.models import User
+from apps.insurances.models import Policy, PolicyRecord, Category
 from django.contrib.auth.models import Group
 from apps.users.dto import RegisterUser, UpdateUser
+from apps.companies.models import Company
 
 # Group Names
 ADMIN = "Admin"
@@ -16,13 +18,31 @@ CUSTOMER = "Customer"
 RISK_ACCESSOR = "Risk Assessor"
 
 
-def index(request):
-    return render(request, "index.html", {})
+def customer_dashboard(request):
+    context = {
+        "total_policy": Policy.objects.all().count(),
+        "total_applied": PolicyRecord.objects.filter(user=request.user).count(),
+        "total_category": Category.objects.all().count()
+    }
+    return render(request, "customer/dashboard.html", context)
+
+
+def admin_dashboard(request):
+    context = {
+        "total_users": User.objects.all().count(),
+        "total_policies": Policy.objects.all().count(),
+        "total_categories": Category.objects.all().count(),
+        "total_applied": PolicyRecord.objects.all().count(),
+        "total_approved": PolicyRecord.objects.filter(status="Approved").count(),
+        "total_rejected": PolicyRecord.objects.filter(status="Rejected").count(),
+        "total_pending": PolicyRecord.objects.filter(status="Pending").count(),
+        "total_companies": Company.objects.all().count(),
+    }
+    return render(request, "admin-app/dashboard.html", context)
 
 
 def register(request):
     if request.method == "POST":
-
         is_valid, data = _get_attribute_from_request_reg(request)
         if not is_valid:
             return render(request, "user/siginup.html", {})
@@ -65,20 +85,23 @@ def signin(request):
     password = request.POST.get("password", None)
     user: User = authenticate(request, username=username, password=password)
     if user:
+        login(request, user)
         if user.is_superuser:
-            return render(request, "admin/dashboard.html", {})
+            return render(request, "admin-app/dashboard.html", {})
+        elif user.group.name == ADMIN or user.is_superuser:
+            return render(request, "admin-app/dashboard.html", {})
         elif user.group.name == COMPANY_USER:
             ...
         elif user.group.name == CUSTOMER:
             return render(request, "customer/dashboard.html", {})
         elif user.group.name == RISK_ACCESSOR:
             ...
-    return render(request, "user/signin.html", {})
+    return render(request, "user/signin.html", {"message": "Username or Password Incorrect"})
 
 
 def signout(request):
     logout(request)
-    return render(request, "index.html", {})
+    return render(request, "main/index.html", {})
 
 
 def update(request, pk: uuid.UUID):

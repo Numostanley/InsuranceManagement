@@ -1,9 +1,11 @@
 from django.urls import path
 from apps.insurances.views.category import view
 
+app_name="categories"
 urlpatterns = [
-    path("create", view.create, name="category-create"),
-    path("list", view.list, name="category-list"),
-    path("update/<uuid:id>", view.update, name="category-update"),
+    path("home", view.home, name="home"),
+    path("create", view.create, name="create"),
+    path("list", view.list, name="list"),
+    path("update/<uuid:id>", view.update, name="update"),
     path("details/<uuid:id>", view.details, name="category-details"),
 ]

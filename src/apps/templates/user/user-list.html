@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin-app/base.html' %}
 {% block content %}
     {% load static %}
 
@@ -62,7 +62,7 @@
                         <td>{{ user.phone_number }}</td>
                         <td>{{ user.location }}</td>
 
-                        <td><a class="btn btn-primary btn-xs" href="{% url 'user-update' user.id %}"><span
+                        <td><a class="btn btn-primary btn-xs" href="{% url 'users:user-update' user.id %}"><span
                                 class="glyphicon glyphicon-edit"></span></a></td>
                     </tr>
                 {% endfor %}

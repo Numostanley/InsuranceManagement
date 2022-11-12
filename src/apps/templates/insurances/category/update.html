@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin-app/base.html' %}
 {% load widget_tweaks %}
 {% block content %}
     <head>
@@ -55,7 +55,7 @@
     <h3 style="text-align:center;">UPDATE CATEGORY</h3>
     <div>
         <form method="post" autocomplete="off" enctype="multipart/form-data"
-              style="margin-left:200px;margin-right:200px;" action="{% url 'category-update' category.id %}">
+              style="margin-left:200px;margin-right:200px;" action="{% url 'insurances:categories:update' category.id %}">
             {% csrf_token %}
             <label for="name">Category Name</label>
             <input name="name" id="name" type="text" value="{{ category.name }}">

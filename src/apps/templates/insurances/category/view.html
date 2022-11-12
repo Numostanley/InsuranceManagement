@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin-app/base.html' %}
 {% block content %}
     {% load static %}
 
@@ -42,7 +42,7 @@
                         <td> {{ forloop.counter }}</td>
                         <td> {{ category.name }}</td>
                         <td>{{ category.creation_date }}</td>
-                        <td><a class="btn btn-danger btn-xs" href="{% url 'category-update' category.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                        <td><a class="btn btn-danger btn-xs" href="{% url 'insurances:categories:update' category.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
                     </tr>
                 {% endfor %}
             </table>

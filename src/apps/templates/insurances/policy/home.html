@@ -78,7 +78,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'policy-list' %}" style="text-decoration: none;color:white;">View
+                        <h6 class="m-b-20"><a href="{% url 'insurances:polices:list' %}" style="text-decoration: none;color:white;">View
                             Policy</a></h6>
                         <h2 class="text-right"><i class="fas fa-eye f-left"></i></h2>
                     </div>
@@ -88,7 +88,7 @@
                 <div class="col-md-4 col-xl-3">
                     <div class="card bg-c-green order-card">
                         <div class="card-block">
-                            <h6 class="m-b-20"><a href="{% url 'policy-create' %}" style="text-decoration: none;color:white;">Add
+                            <h6 class="m-b-20"><a href="{% url 'insurances:polices:create' %}" style="text-decoration: none;color:white;">Add
                                 policy</a></h6>
                             <h2 class="text-right"><i class="fas fa-plus f-left"></i></h2>
                         </div>
@@ -103,7 +103,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'record-list' "All" %}"
+                        <h6 class="m-b-20"><a href="{% url 'insurances:records:list' "All" %}"
                                               style="text-decoration: none;color:white;">Total Applied Policy Holder</a>
                         </h6>
                         <h2 class="text-right"><i
@@ -116,7 +116,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'record-list' "Approved" %}"
+                        <h6 class="m-b-20"><a href="{% url 'insurances:records:list' "Approved" %}"
                                               style="text-decoration: none;color:white;">Approved Policy Holder</a></h6>
                         <h2 class="text-right"><i
                                 class="fas fa-user-check f-left"></i><span>{{ total_approved }}</span></h2>
@@ -128,7 +128,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'record-list' "Rejected" %}"
+                        <h6 class="m-b-20"><a href="{% url 'insurances:records:list' "Rejected" %}"
                                               style="text-decoration: none;color:white;">Disapproved Policy Holder</a>
                         </h6>
                         <h2 class="text-right"><i
@@ -141,7 +141,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'record-list' "Pending" %}"
+                        <h6 class="m-b-20"><a href="{% url 'insurances:records:list' "Pending" %}"
                                               style="text-decoration: none;color:white;">Policy Holder Waiting For
                             Approval</a></h6>
                         <h2 class="text-right"><i

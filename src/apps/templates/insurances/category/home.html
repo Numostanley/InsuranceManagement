@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin-app/base.html' %}
 {% load widget_tweaks %}
 {% block content %}
 
@@ -77,7 +77,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'category-list' %}" style="text-decoration: none;color:white;">view
+                        <h6 class="m-b-20"><a href="{% url 'insurances:categories:list' %}" style="text-decoration: none;color:white;">view
                             Category</a></h6>
                         <h2 class="text-right"><i class="fas fa-eye f-left"></i></h2>
                     </div>
@@ -87,7 +87,7 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block">
-                        <h6 class="m-b-20"><a href="{% url 'category-create' %}" style="text-decoration: none;color:white;">Add
+                        <h6 class="m-b-20"><a href="{% url 'insurances:categories:create' %}" style="text-decoration: none;color:white;">Add
                             Category</a></h6>
                         <h2 class="text-right"><i class="fas fa-plus f-left"></i></h2>
                     </div>

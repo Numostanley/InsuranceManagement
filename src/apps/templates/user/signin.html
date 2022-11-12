@@ -147,20 +147,28 @@
     </style>
 </head>
 <body>
-{% include "navbar.html" %}
+{% include "includes/navbar.html" %}
 
 
 <div class="log-form">
     <h2 class="text-center">LOGIN TO YOUR ACCOUNT</h2><br>
-    <form method="post" action="{% url 'sign-in' %}">
-        {% csrf_token %}
-        <label for="username">Username</label>
-        <input name="username" id="username" type="text" class="form-control" placeholder="Username">
-        <label for="password">Password</label>
-        <input name="password" type="password" id="password"  class="form-control" placeholder="Password">
-        <button type="submit" class="btn primary text-center">Login</button>
+    {% if message %}
+        <div class="container">
+            <span class="alert alert-danger" role="alert">{{ message }}</span>
+        </div>
+    {% endif %}
+    <div class="container mt-5">
+        <form method="post" action="{% url 'users:sign-in' %}">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input name="username" id="username" type="text" class="form-control" placeholder="Username">
+            <label for="password">Password</label>
+            <input name="password" type="password" id="password" class="form-control" placeholder="Password">
+            <button type="submit" class="btn primary text-center">Login</button>
 
-    </form>
+        </form>
+    </div>
+
 </div><!--end log form -->
 
 

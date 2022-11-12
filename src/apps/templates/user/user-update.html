@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'admin-app/base.html' %}
 {% load widget_tweaks %}
 {% block content %}
     <head>
@@ -55,7 +55,7 @@
     <h3 style="text-align:center;">UPDATE CUSTOMER</h3>
     <div>
         <form method="post" autocomplete="off" enctype="multipart/form-data"
-              style="margin-left:200px;margin-right:200px;" action="{% url 'user-update' user.id %}">
+              style="margin-left:200px;margin-right:200px;" action="{% url 'users:user-update' user.id %}">
             {% csrf_token %}
 
             <div class="form-row">

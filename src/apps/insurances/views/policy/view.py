@@ -9,12 +9,15 @@ from apps.users.views import ADMIN, COMPANY_USER, CUSTOMER
 @authorize([COMPANY_USER, ADMIN])
 def home(request):
     user: User = request.user
-    group_name = user.get_group_name()
+    if request.user.is_superuser:
+        group_name = "Admin"
+    else:
+        group_name = user.get_group_name()
     total_application = 0
     total_disapproved = 0
     total_pending = 0
     total_approved = 0
-    base_template = 'admin/base.html'
+    base_template = 'admin-app/base.html'
     if group_name == ADMIN:
         total_application = PolicyRecord.objects.all().count()
         total_approved = PolicyRecord.objects.filter(status="Approved").count()
@@ -62,7 +65,7 @@ def create(request):
     policy.premium = premium
     policy.tenure = tenure
     policy.save()
-    return render(request, "insurances/policy/create.html", {"message": "Created"})
+    return redirect("insurances:categories:list")
 
 
 @authorize([COMPANY_USER])
@@ -82,7 +85,7 @@ def update(request, policy_id: UUID):
         policy.premium = premium
         policy.tenure = tenure
         policy.save()
-        return redirect(list)
+        return redirect("insurances:polices:list")
     except (Policy.DoesNotExist, Policy.MultipleObjectsReturned) as e:
         return render(request, "insurances/policy/", {"message": "No Policy found"})
 
@@ -90,19 +93,19 @@ def update(request, policy_id: UUID):
 @authorize([ADMIN, CUSTOMER])
 def list(request):
     user: User = request.user
-    base_template = 'admin/base.html'
+    base_template = 'admin-app/base.html'
+    records = Policy.objects.only("name", "sum_assurance", "tenure", "company", "category",
+                                  "premium", "creation_date", "id")
+    if request.user.is_superuser:
+        return render(request, "insurances/policy/list.html",
+                      {"base_template": base_template, "policies": records, "group": "Admin"})
     group_name = user.get_group_name()
-    if group_name == ADMIN:
-        policies = Policy.objects.only("name", "sum_assurance", "tenure", "company", "category",
-                                       "premium", "creation_date", "id")
-    else:
+    if group_name == COMPANY_USER:
         company_id = request.user.company.id
-        policies = Policy.objects.filter(company_id=company_id).only("name", "sum_assurance", "tenure",
-                                                                     "company", "category",
-                                                                     "premium", "creation_date", "id")
+        records = records.filter(company_id=company_id)
         base_template = 'companies/base.html'
     return render(request, "insurances/policy/list.html",
-                  {"base_template": base_template, "policies": policies, "group": group_name})
+                  {"base_template": base_template, "policies": records, "group": group_name})
 
 
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
