@@ -1,15 +1,18 @@
-import uuid
-from typing import Tuple
 import re
+import uuid
+
+from typing import Tuple
 
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Group
 from django.shortcuts import render
+
 from apps.users.models import User
 from apps.insurances.models import Policy, PolicyRecord, Category
-from django.contrib.auth.models import Group
 from apps.users.dto import RegisterUser, UpdateUser
 from apps.companies.models import Company
+
 
 # Group Names
 ADMIN = "Admin"

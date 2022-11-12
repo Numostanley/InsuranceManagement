@@ -1,13 +1,17 @@
-from apps.insurances.models import PolicyRecord
-from django.shortcuts import render, redirect
 from uuid import UUID
+
+from django.db import transaction
+from django.shortcuts import render, redirect
+
 from apps.decorators import authorize
+from apps.insurances.models import PolicyRecord
 from apps.users.models import User
 from apps.users.views import ADMIN, COMPANY_USER, CUSTOMER
 
 
 @authorize([CUSTOMER])
-def create(request, policy_id: UUID):
+@transaction.atomic
+def create_policy_record(request, policy_id: UUID):
     user_id = request.user.id
     policy_record = PolicyRecord()
     policy_record.policy_id = policy_id
@@ -17,9 +21,10 @@ def create(request, policy_id: UUID):
 
 
 @authorize([COMPANY_USER])
-def update(request, record_id: UUID, status: str):
+@transaction.atomic
+def update_policy_record(request, record_id: UUID, status: str):
     try:
-        policy_record = PolicyRecord.objects.get(id=record_id)
+        policy_record = PolicyRecord.get_user_policy_record(request.user, record_id)
         policy_record.status = status
         policy_record.save()
         return render(request, "", {})
@@ -28,7 +33,7 @@ def update(request, record_id: UUID, status: str):
 
 
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
-def list(request, status: str):
+def policy_record_list(request, status: str):
     user: User = request.user
     group_name = user.get_group_name()
     base_template = "admin-app/base.html"
@@ -50,7 +55,7 @@ def list(request, status: str):
 
 
 @authorize([COMPANY_USER, ADMIN, CUSTOMER])
-def details(request, record_id: UUID):
+def policy_record_detail(request, record_id: UUID):
     try:
         policy_record = PolicyRecord.objects.select_related("user", "policy").get(id=record_id)
         return render(request, "", {})

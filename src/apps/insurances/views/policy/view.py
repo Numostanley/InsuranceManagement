@@ -43,7 +43,7 @@ def apply(request):
 
 
 @authorize([COMPANY_USER])
-def create(request):
+def create_policy(request):
     if request.method == "GET":
         categories = Category.objects.only("id", "name").all()
         return render(request, "insurances/policy/create.html", {"categories": categories})
@@ -69,7 +69,7 @@ def create(request):
 
 
 @authorize([COMPANY_USER])
-def update(request, policy_id: UUID):
+def update_policy(request, policy_id: UUID):
     try:
         policy = Policy.objects.get(id=policy_id)
         if request.method == 'GET':
@@ -91,7 +91,7 @@ def update(request, policy_id: UUID):
 
 
 @authorize([ADMIN, CUSTOMER])
-def list(request):
+def policy_list(request):
     user: User = request.user
     base_template = 'admin-app/base.html'
     records = Policy.objects.only("name", "sum_assurance", "tenure", "company", "category",
@@ -109,7 +109,7 @@ def list(request):
 
 
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
-def details(request, policy_id: UUID):
+def policy_detail(request, policy_id: UUID):
     try:
         policy = Policy.objects.get(id=policy_id)
         return render(request, "", {})

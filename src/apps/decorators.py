@@ -9,10 +9,11 @@ from apps.users.models import User
 
 def validate_company_user(f):
     @wraps(f)
-    def func(request, *args, **kwargs):
-        if request.user == '':
-            return f(*args, **kwargs)
-
+    def func(request, company_id: str, *args, **kwargs):
+        company = Company.get_company_by_id(company_id)
+        if request.user.id == company.user.id:
+            return f(request, *args, **kwargs)
+        return render(request, '403.html')
     return func
 
 

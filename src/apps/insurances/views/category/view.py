@@ -1,6 +1,8 @@
-from apps.insurances.models import Category
-from django.shortcuts import render, redirect
 from uuid import UUID
+
+from django.shortcuts import render, redirect
+
+from apps.insurances.models import Category
 from apps.decorators import authorize
 from apps.users.views import ADMIN, COMPANY_USER
 
@@ -11,7 +13,7 @@ def home(request):
 
 
 @authorize([ADMIN])
-def create(request):
+def create_category(request):
     if request.method == "GET":
         return render(request, "insurances/category/create.html", {})
     name = request.POST.get("name", None)
@@ -25,7 +27,7 @@ def create(request):
 
 
 @authorize([ADMIN])
-def update(request, id: UUID):
+def update_category(request, id: UUID):
     try:
         category = Category.objects.get(id=id)
         if request.method == "GET":
@@ -39,13 +41,13 @@ def update(request, id: UUID):
 
 
 @authorize([ADMIN, COMPANY_USER])
-def list(request):
+def category_list(request):
     categories = Category.objects.all()
     return render(request, "insurances/category/view.html", {"categories": categories})
 
 
 @authorize([ADMIN, COMPANY_USER])
-def details(request, id: UUID):
+def category_detail(request, id: UUID):
     try:
         category = Category.objects.get(id=id)
         render(request, "", {})
