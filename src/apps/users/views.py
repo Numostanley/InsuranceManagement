@@ -3,6 +3,7 @@ from typing import Tuple
 import re
 
 from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
 from apps.users.models import User
@@ -18,6 +19,7 @@ CUSTOMER = "Customer"
 RISK_ACCESSOR = "Risk Assessor"
 
 
+@login_required
 def customer_dashboard(request):
     context = {
         "total_policy": Policy.objects.all().count(),
@@ -27,6 +29,7 @@ def customer_dashboard(request):
     return render(request, "customer/dashboard.html", context)
 
 
+@login_required
 def company_dashboard(request):
     context = {
         "total_policies": Policy.objects.all().count(),
@@ -39,6 +42,7 @@ def company_dashboard(request):
     return render(request, "companies/dashboard.html", context)
 
 
+@login_required
 def admin_dashboard(request):
     context = {
         "total_users": User.objects.all().count(),
@@ -74,6 +78,7 @@ def register(request):
     return render(request, "user/siginup.html", {"group": CUSTOMER})
 
 
+@login_required
 def list(request):
     users = User.objects.exclude(is_superuser=True).defer("password").all()
     return render(request, "user/user-list.html", context={'users': users})
@@ -105,6 +110,7 @@ def signout(request):
     return render(request, "main/index.html", {})
 
 
+@login_required
 def update(request, pk: uuid.UUID):
     try:
         user = User.objects.get(id=pk)
@@ -121,6 +127,7 @@ def update(request, pk: uuid.UUID):
         return render(request, "user/user-list.html", {})
 
 
+@login_required
 def details(request, pk: uuid.UUID):
     try:
         user = User.objects.exclude("password").get(id=pk)
@@ -129,6 +136,7 @@ def details(request, pk: uuid.UUID):
         return render(request, "", {})
 
 
+@login_required
 def delete(request, pk: uuid.UUID):
     try:
         User.objects.get(id=pk).delete()
@@ -137,7 +145,7 @@ def delete(request, pk: uuid.UUID):
         return render(request, "", {})
 
 
-def add_user_to_group(user: User, group: str):
+def _add_user_to_group(user: User, group: str):
     group, _ = Group.objects.get_or_create(name=group)
     user.group = group
     user.save()
@@ -157,7 +165,7 @@ def _save(data: RegisterUser, file) -> User:
     user.save()
 
     # assign user to group
-    add_user_to_group(user, data.group)
+    _add_user_to_group(user, data.group)
     return user
 
 

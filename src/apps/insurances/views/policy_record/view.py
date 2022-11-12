@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+
 from apps.insurances.models import PolicyRecord
 from django.shortcuts import render, redirect
 from uuid import UUID
@@ -16,6 +18,7 @@ def create(request, policy_id: UUID):
     return redirect("insurances:polices:apply")
 
 
+@login_required
 @authorize([COMPANY_USER])
 def update(request, id: UUID, status: str):
     try:
@@ -27,6 +30,7 @@ def update(request, id: UUID, status: str):
         return redirect("insurances:records:list")
 
 
+@login_required
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
 def list(request, status: str):
     user: User = request.user
@@ -49,6 +53,7 @@ def list(request, status: str):
                   {"group": group_name, "base_template": base_template, "records": records})
 
 
+@login_required
 @authorize([COMPANY_USER, ADMIN, CUSTOMER])
 def details(request, record_id: UUID):
     try:

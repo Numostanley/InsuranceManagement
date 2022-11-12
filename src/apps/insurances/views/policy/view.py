@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+
 from apps.insurances.models import Policy, PolicyRecord, Category
 from django.shortcuts import render, redirect
 from uuid import UUID
@@ -6,6 +8,7 @@ from apps.users.models import User
 from apps.users.views import ADMIN, COMPANY_USER, CUSTOMER
 
 
+@login_required
 @authorize([COMPANY_USER, ADMIN])
 def home(request):
     user: User = request.user
@@ -37,11 +40,13 @@ def home(request):
                    "base_template": base_template})
 
 
+@login_required
 def apply(request):
     policies = Policy.objects.all()
     return render(request, "insurances/policy/apply.html", {"polices": policies})
 
 
+@login_required
 @authorize([COMPANY_USER])
 def create(request):
     if request.method == "GET":
@@ -68,6 +73,7 @@ def create(request):
     return redirect("insurances:polices:list")
 
 
+@login_required
 @authorize([COMPANY_USER, CUSTOMER])
 def update(request, id: UUID):
     try:
@@ -90,6 +96,7 @@ def update(request, id: UUID):
         return render(request, "insurances/policy/", {"message": "No Policy found"})
 
 
+@login_required
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
 def list(request):
     user: User = request.user
@@ -108,6 +115,7 @@ def list(request):
                   {"base_template": base_template, "policies": records, "group": group_name})
 
 
+@login_required
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
 def details(request, policy_id: UUID):
     try:

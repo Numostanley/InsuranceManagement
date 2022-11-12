@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+
 from apps.insurances.models import Category
 from django.shortcuts import render, redirect
 from uuid import UUID
@@ -6,11 +8,13 @@ from apps.users.models import User
 from apps.users.views import ADMIN, COMPANY_USER
 
 
+@login_required
 @authorize([ADMIN])
 def home(request):
     return render(request, "insurances/category/home.html", {})
 
 
+@login_required
 @authorize([ADMIN])
 def create(request):
     if request.method == "GET":
@@ -25,6 +29,7 @@ def create(request):
     return redirect("insurances:categories:list")
 
 
+@login_required
 @authorize([ADMIN])
 def update(request, id: UUID):
     try:
@@ -39,6 +44,7 @@ def update(request, id: UUID):
         return render(request, "insurances/category/view.html", {"message": "category not found"})
 
 
+@login_required
 @authorize([ADMIN, COMPANY_USER])
 def list(request):
     base_template = "admin-app/base.html"
@@ -56,6 +62,7 @@ def list(request):
                   {"categories": categories, "base_template": base_template, "group": group})
 
 
+@login_required
 @authorize([ADMIN, COMPANY_USER])
 def details(request, id: UUID):
     try:
