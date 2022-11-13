@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
+
+from apps.risk_assessment.models import RiskAssessment
 from apps.users.models import User
 from apps.insurances.models import Policy, PolicyRecord, Category
 from django.contrib.auth.models import Group
@@ -16,7 +18,19 @@ from apps.companies.models import Company
 ADMIN = "Admin"
 COMPANY_USER = "Company User"
 CUSTOMER = "Customer"
-RISK_ACCESSOR = "Risk Assessor"
+RISK_ASSESSOR = "Risk Assessor"
+
+
+def pre_login(request):
+    return render(request, "user/pre-login.html", {})
+
+
+def assessor_dashboard(request):
+    context = {
+        'total_assessment': RiskAssessment.objects.filter(assessor=request.user).count(),
+        'total_polices': Policy.objects.all().count(),
+    }
+    return render(request, "risk-assessment/dashboard.html", context)
 
 
 @login_required
@@ -94,8 +108,8 @@ def signin(request):
             return redirect("users:company-dashboard")
         elif user.group.name == CUSTOMER:
             return redirect("users:customer-dashboard")
-        elif user.group.name == RISK_ACCESSOR:
-            ...
+        elif user.group.name == RISK_ASSESSOR:
+            return redirect("users:assessor-dashboard")
     return render(request, "user/signin.html", {"message": "Username or Password Incorrect"})
 
 
@@ -155,8 +169,8 @@ def _render_registration_view(request, message=None):
     if group.lower() == COMPANY_USER.lower():
         return render(request, "companies/company-user.html",
                       {"group": COMPANY_USER, "company_id": company_id, "message": message})
-    if group.lower() == RISK_ACCESSOR.lower():
-        return render(request, "user/siginup.html", {"group": RISK_ACCESSOR, "message": message})
+    if group.lower() == RISK_ASSESSOR.lower():
+        return render(request, "user/siginup.html", {"group": RISK_ASSESSOR, "message": message})
     return render(request, "user/siginup.html", {"group": CUSTOMER, "message": message})
 
 
