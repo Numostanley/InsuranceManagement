@@ -146,14 +146,10 @@ dump.rdb
 # coverage bash files
 
 codecov.sh
-<<<<<<< HEAD
-coverage-vulnscan.bash
+deploy.sh
 
 # docusign_files
 # docusign_file/
 
 # docusign private_key
-# private_key.pem
-=======
-deploy.sh
->>>>>>> 7feecb78825d2ad04469f8a0060ebfc0d119f81c
+private_key.pem
