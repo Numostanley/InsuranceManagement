@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends 'risk-assessment/base.html' %}
 {% block content %}
     {% load static %}
 
@@ -20,13 +20,27 @@
             .row {
                 margin: 100px;
             }
+
+            label #sidebar_btn {
+                z-index: 1;
+                color: #fff;
+                position: fixed;
+                cursor: pointer;
+                left: 300px;
+                padding-left: 60px;
+                margin-top: 15px;
+                font-size: 20px;
+
+                transition: 0.5s;
+                transition-property: color;
+            }
         </style>
     </head>
     <br><br>
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h6 class="panel-title">Policies</h6>
+                <h6 class="panel-title">Available Policies</h6>
             </div>
             <table class="table table-hover" id="dev-table">
                 <thead>
@@ -38,33 +52,25 @@
                     <th> Premium</th>
                     <th> Tenure</th>
                     <th> Creation Date</th>
-                    <th> Company name</th>
-                    {% if not group == "Admin" %}
-                        <th>Update</th>
-                    {% endif %}
+                    <th> Assess</th>
+
                 </tr>
                 </thead>
-                {% for policy in policies %}
+                {% for t in polices %}
                     <tr>
                         <td> {{ forloop.counter }}</td>
-                        <td> {{ policy.name }}</td>
-                        <td> {{ policy.category }}</td>
-                        <td> {{ policy.sum_assurance }}</td>
-                        <td> {{ policy.premium }}</td>
-                        <td> {{ policy.tenure }}</td>
-                        <td>{{ policy.creation_date }}</td>
-                        <td>{{ policy.company }}</td>
-                        {% if not group == "Admin" %}
-                            <td><a class="btn btn-danger btn-xs" href="{% url 'insurances:polices:update' policy.id %}"><span
-                                    class="glyphicon glyphicon-edit"></span></a></td>
-                        {% endif %}
-
+                        <td> {{ t.name }}</td>
+                        <td> {{ t.category }}</td>
+                        <td> {{ t.sum_assurance }}</td>
+                        <td> {{ t.premium }}</td>
+                        <td> {{ t.tenure }}</td>
+                        <td>{{ t.creation_date }}</td>
+                        <td><a class="btn btn-danger btn-xs" href="{% url 'risk-assessment:create' %}?policy_id={{ t.id }}">Assess</a></td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
     </div>
-    <script src="{% static 'chatbot_script.js' %}" type="text/javascript"></script>
 
     <br><br><br><br><br><br>
 {% endblock content %}

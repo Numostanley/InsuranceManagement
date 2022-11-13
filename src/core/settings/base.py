@@ -70,7 +70,8 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.signatures",
     "crispy_forms",
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
+    "apps.risk_assessment"
 ]
 
 MIDDLEWARE = [

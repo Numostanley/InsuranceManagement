@@ -175,7 +175,7 @@
 <div class="sidebar" style="margin-top:60px;">
     <center>
 
-        <img src="{% static customer.profile_pic.url %}" class="profile_image" alt="">
+        <img src="{% static request.user.image %}" class="profile_image" alt="">
         <h4>{{ request.user.first_name }}</h4>
         <h6 style="color: rgb(255, 255, 255);">( Customer )</h6>
 
