@@ -1,31 +1,30 @@
 from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 
 from apps import decorators
 from apps.reviews.forms import Review, ReviewForm
 from .models import Company
 from .forms import CreateCompanyForm, UpdateCompanyForm
+from ..users.views import COMPANY_USER
 
 
-@login_required
 @transaction.atomic
 def create_company(request):
     if request.method == "POST":
         form = CreateCompanyForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            if Company.get_company_by_name(form.name) or \
-                    Company.get_company_by_email(form.email) or \
-                    Company.get_company_by_contact(form.contact) or \
-                    Company.get_company_by_website(form.website):
+            if Company.get_company_by_name(form.data["name"]) or \
+                    Company.get_company_by_email(form.data["email"]) or \
+                    Company.get_company_by_contact(form.data["contact"]) or \
+                    Company.get_company_by_website(form.data["website"]):
                 messages.error(request, f'{form.errors}')
                 return render(request, 'companies/create_company.html')
-            form.save(commit=False)
-            form.user = request.user
             form.save()
-            messages.success(request, f'{form.name} is successfully created!')
-            return redirect('companies:companies')
+            company = Company.get_company_by_name(form.data["name"])
+            messages.success(request, f'{form.data["name"]} is successfully created!')
+            return redirect(reverse('users:sign-up') + f'?group={COMPANY_USER}&company_id={company.id}')
         return render(request, 'companies/create_company.html')
     else:
         form = CreateCompanyForm()

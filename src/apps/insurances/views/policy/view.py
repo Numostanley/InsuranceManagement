@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+
 from apps.insurances.models import Policy, PolicyRecord, Category
 from django.shortcuts import render, redirect
 from uuid import UUID
@@ -6,6 +8,7 @@ from apps.users.models import User
 from apps.users.views import ADMIN, COMPANY_USER, CUSTOMER
 
 
+@login_required
 @authorize([COMPANY_USER, ADMIN])
 def home(request):
     user: User = request.user
@@ -30,18 +33,20 @@ def home(request):
         total_approved = PolicyRecord.objects.filter(status="Approved").count()
         total_disapproved = PolicyRecord.objects.filter(status="DisApproved", policy__company_id=company_id).count()
         total_pending = PolicyRecord.objects.filter(status="Pending", policy__company_id=company_id).count()
-        base_template = 'companies/base.html'
+        base_template = 'companies/comp-base.html'
     return render(request, "insurances/policy/home.html",
                   {"total_application": total_application, "total_disapproved": total_disapproved,
                    "total_pending": total_pending, "total_approved": total_approved, "group": group_name,
                    "base_template": base_template})
 
 
+@login_required
 def apply(request):
     policies = Policy.objects.all()
     return render(request, "insurances/policy/apply.html", {"polices": policies})
 
 
+@login_required
 @authorize([COMPANY_USER])
 def create(request):
     if request.method == "GET":
@@ -65,13 +70,14 @@ def create(request):
     policy.premium = premium
     policy.tenure = tenure
     policy.save()
-    return redirect("insurances:categories:list")
+    return redirect("insurances:polices:list")
 
 
-@authorize([COMPANY_USER])
-def update(request, policy_id: UUID):
+@login_required
+@authorize([COMPANY_USER, CUSTOMER])
+def update(request, id: UUID):
     try:
-        policy = Policy.objects.get(id=policy_id)
+        policy = Policy.objects.get(id=id)
         if request.method == 'GET':
             return render(request, "insurances/policy/update.html", {"policy": policy})
         category_id = request.POST.get("category_id", policy.category_id)
@@ -90,7 +96,8 @@ def update(request, policy_id: UUID):
         return render(request, "insurances/policy/", {"message": "No Policy found"})
 
 
-@authorize([ADMIN, CUSTOMER])
+@login_required
+@authorize([ADMIN, COMPANY_USER, CUSTOMER])
 def list(request):
     user: User = request.user
     base_template = 'admin-app/base.html'
@@ -103,11 +110,12 @@ def list(request):
     if group_name == COMPANY_USER:
         company_id = request.user.company.id
         records = records.filter(company_id=company_id)
-        base_template = 'companies/base.html'
+        base_template = 'companies/comp-base.html'
     return render(request, "insurances/policy/list.html",
                   {"base_template": base_template, "policies": records, "group": group_name})
 
 
+@login_required
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
 def details(request, policy_id: UUID):
     try:

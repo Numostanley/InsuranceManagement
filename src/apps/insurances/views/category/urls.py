@@ -1,7 +1,9 @@
 from django.urls import path
 from apps.insurances.views.category import view
 
+
 app_name="categories"
+
 urlpatterns = [
     path("home", view.home, name="home"),
     path("create", view.create, name="create"),

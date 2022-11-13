@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends 'companies/comp-base.html' %}
 {% load widget_tweaks %}
 {% block content %}
     <head>
@@ -55,15 +55,14 @@
     <h3 style="text-align:center;">UPDATE POLICY</h3>
     <div>
         <form method="post" autocomplete="off" enctype="multipart/form-data"
-              style="margin-left:200px;margin-right:200px;" action="{% url 'policy-update' policy.id %}">
+              style="margin-left:200px;margin-right:200px;" action="{% url 'insurances:polices:update' policy.id %}">
             {% csrf_token %}
-            <label for="category">Category</label>
-            <select name="category" id="category">
-                {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                {% endfor %}
-
-            </select>
+{#            <label for="category">Category</label>#}
+{#            <select name="category" id="category">#}
+{#                {% for category in categories %}#}
+{#                    <option value="{{ category.id }}">{{ category.name }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
 
             <label for="name">Policy Name</label>
             <input name="name" class="form-control" placeholder="Policy Name" type="text" id="name"
@@ -71,7 +70,7 @@
 
             <label for="sum_Assurance">Sum Assurance</label>
             <input name="sum_Assurance" class="form-control" placeholder="Sum Assurance" type="number"
-                   id="sum_Assurance" value="{{ policy. sum_Assurance }}">
+                   id="sum_Assurance" value="{{ policy.sum_assurance }}">
 
             <label for="premium">Premium</label>
             <input name="premium" class="form-control" placeholder="Premium" type="number" id="premium"

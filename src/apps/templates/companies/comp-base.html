@@ -78,7 +78,7 @@
         .sidebar h4 {
             color: #ccc;
             margin-top: 0;
-
+            margin-bottom: 20px;
         }
 
         .sidebar a {
@@ -107,10 +107,12 @@
             position: fixed;
             cursor: pointer;
             left: 300px;
+            padding-left: 30px;
             font-size: 20px;
             margin: 5px 0;
             transition: 0.5s;
             transition-property: color;
+            margin-top: 17px;
         }
 
         label #sidebar_btn:hover {
@@ -161,7 +163,7 @@
 <!--header area start-->
 <header style="padding-top: 0px;">
     <label for="check">
-        <i style="padding-left: 60px;margin-top: 17px;" class="fas fa-bars" id="sidebar_btn"></i>
+        <i style="" class="fas fa-bars" id="sidebar_btn"></i>
     </label>
     <div class="left_area">
         <h3>Insurance Management</h3>
@@ -169,27 +171,32 @@
     <div class="right_area">
         <a href="{% url 'users:sign-out' %}" class="logout_btn">Logout</a>
     </div>
+
 </header>
 <!--header area end-->
 <!--sidebar start-->
-<div class="sidebar" style="margin-top:60px;">
+<div class="sidebar" style="
+    margin-top: 50px;
+">
     <center>
 
-        <img src="{% static customer.profile_pic.url %}" class="profile_image" alt="">
-        <h4>{{ request.user.first_name }}</h4>
-        <h6 style="color: rgb(255, 255, 255);">( Customer )</h6>
+        <img src="{% static "image/admin-app.png" %}" class="profile_image" alt="">
+        <h4>Admin</h4>
 
     </center>
 
-    <a href="{% url 'users:customer-dashboard' %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="{% url 'insurances:polices:apply' %}"><i class="fab fa-product-hunt"></i><span>Apply Policy</span></a>
+    <a href="{% url 'users:company-dashboard' %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+    <a href="{% url 'insurances:polices:home' %}"><i class="fab fa-product-hunt"></i><span>Policy</span></a>
     <div id="google_translate_element"></div>
+
+
 </div>
 <!--sidebar end-->
 
 
 <!--content start-->
 <div class="content">
+
     <br><br><br><br><br>
     {% block content %}
 
@@ -200,6 +207,7 @@
 
 </div>
 <!--content end-->
+
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
