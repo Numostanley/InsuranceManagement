@@ -174,22 +174,21 @@ def signature_by_embedded(token, base64_file_content, signer_name, signer_email,
 def sign_completed( request):
     return HttpResponse('Signing completed successfully')
 
-# @api_view(['GET'])
-# @csrf_exempt
-# def get_envelope_status(request, envelope_id):
-#     token = create_jwt_grant()
-#     post_data = {'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer', 
-#                  'assertion': token}
-#     base_url = 'https://account-d.docusign.com/oauth/token'
-#     r = requests.post(base_url, data=post_data)
-#     token = r.json()
-#     base_url = f'https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes/{envelope_id}'
-#     r = requests.get(base_url, headers={'Authorization': 'Bearer ' + token['access_token']})
-#     response = r.json()
-#     logger.info('response: %s', response)
+@api_view(['GET'])
+def get_envelope_status(request, envelope_id):
+    token = create_jwt_grant()
+    post_data = {'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer', 
+                 'assertion': token}
+    base_url = 'https://account-d.docusign.com/oauth/token'
+    r = requests.post(base_url, data=post_data)
+    token = r.json()
+    base_url = f'https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes/{envelope_id}'
+    r = requests.get(base_url, headers={'Authorization': 'Bearer ' + token['access_token']})
+    response = r.json()
+    logger.info('response: %s', response)
     
-#     return JsonResponse({
-#         'response': response,
-#         'error': ''
-#     }, status=status.HTTP_200_OK)
+    return JsonResponse({
+        'response': response,
+        'error': ''
+    }, status=status.HTTP_200_OK)
     
