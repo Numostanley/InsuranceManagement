@@ -147,3 +147,9 @@ dump.rdb
 
 codecov.sh
 coverage-vulnscan.bash
+
+# docusign_files
+# docusign_file/
+
+# docusign private_key
+# private_key.pem

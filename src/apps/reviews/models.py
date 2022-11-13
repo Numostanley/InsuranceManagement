@@ -28,7 +28,7 @@ class Review(models.Model):
         ]
 
     @staticmethod
-    def create_review(company: Company, reviewer: User, rating: int, comment: str | None):
+    def create_review(company: Company, reviewer: User, rating: int, comment: str or None):
         if comment:
             return Review.objects.create(
                 company=company,

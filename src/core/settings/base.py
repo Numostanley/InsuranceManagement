@@ -60,12 +60,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'rest_framework',
+    'corsheaders',
     'widget_tweaks',
     "apps.companies",
     "apps.insurances",
     "apps.main",
     "apps.reviews",
     "apps.users",
+    "apps.signatures",
     "crispy_forms",
     "crispy_bootstrap5"
 ]
@@ -176,3 +179,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'from@gmail.com'
 EMAIL_HOST_PASSWORD = 'xyz'
 EMAIL_RECEIVING_USER = ['to@gmail.com']
+
+
+# Docusign
+CLIENT_AUTH_ID = env_config['CLIENT_AUTH_ID']
+client_user_id = env_config['client_user_id']
+account_id = env_config['account_id']
