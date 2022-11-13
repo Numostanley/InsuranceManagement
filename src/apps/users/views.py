@@ -61,7 +61,7 @@ def register(request):
     if request.method == "POST":
         is_valid, message = _validate(request)
         if not is_valid:
-            return render(request, "user/siginup.html", {"message": message})
+            return _render_registration_view(request, message)
         user = _save(message, request.FILES.get("image", None))
         company_id = request.POST.get("company_id", None)
         if company_id:
@@ -69,13 +69,7 @@ def register(request):
             company.user = user
             company.save()
         return redirect("users:sign-in")
-    group: str = request.GET.get("group", "")
-    company_id = request.GET.get("company_id", "")
-    if group.lower() == COMPANY_USER.lower():
-        return render(request, "companies/company-user.html", {"group": COMPANY_USER, "company_id": company_id})
-    if group.lower() == RISK_ACCESSOR.lower():
-        return render(request, "user/siginup.html", {"group": RISK_ACCESSOR})
-    return render(request, "user/siginup.html", {"group": CUSTOMER})
+    return _render_registration_view(request)
 
 
 @login_required
@@ -151,6 +145,21 @@ def _add_user_to_group(user: User, group: str):
     user.save()
 
 
+def _render_registration_view(request, message=None):
+    if request.method == "GET":
+        group: str = request.GET.get("group", "")
+        company_id = request.GET.get("company_id", "")
+    else:
+        group: str = request.POST.get("group", "")
+        company_id = request.POST.get("company_id", "")
+    if group.lower() == COMPANY_USER.lower():
+        return render(request, "companies/company-user.html",
+                      {"group": COMPANY_USER, "company_id": company_id, "message": message})
+    if group.lower() == RISK_ACCESSOR.lower():
+        return render(request, "user/siginup.html", {"group": RISK_ACCESSOR, "message": message})
+    return render(request, "user/siginup.html", {"group": CUSTOMER, "message": message})
+
+
 def _save(data: RegisterUser, file) -> User:
     user = User()
     user.id = uuid.uuid4()
@@ -172,7 +181,7 @@ def _save(data: RegisterUser, file) -> User:
 def _validate(request) -> Tuple[bool, str] or Tuple[bool, RegisterUser]:
     is_valid, data = _get_attribute_from_request_reg(request)
     if not is_valid:
-        return False, "Ensure you fill all data"
+        return False, data
     is_valid, message = _validate_password(data.password, data.confirm_password)
     if not is_valid:
         return False, message
@@ -193,7 +202,8 @@ def _get_attribute_from_request_reg(request) -> Tuple[
     model.username = request.POST.get("username", None)
     model.password = request.POST.get("password", None)
     model.confirm_password = request.POST.get("confirm_password", None)
-    if None in [model.email, model.username, model.password, model.confirm_password]:
+    to_check = [model.email, model.username, model.password, model.confirm_password]
+    if None in to_check or '' in to_check:
         return False, "Please ensure you fill data for 'username, email, password and confirm password'"
     model.first_name = request.POST.get("first_name", "")
     model.last_name = request.POST.get("last_name", "")

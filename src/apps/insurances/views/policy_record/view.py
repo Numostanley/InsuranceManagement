@@ -8,6 +8,7 @@ from apps.users.models import User
 from apps.users.views import ADMIN, COMPANY_USER, CUSTOMER
 
 
+@login_required
 @authorize([CUSTOMER])
 def create(request, policy_id: UUID):
     user_id = request.user.id

@@ -29,6 +29,11 @@
 <br><br><br>
 <h3 style="text-align: center;color: red;">Company User SignUp</h3>
 <form method="POST" autocomplete="off" enctype="multipart/form-data" action="{% url 'users:sign-up' %}">
+    {% if message %}
+        <div class="container">
+            <span class="alert alert-danger" role="alert">{{ message }}</span>
+        </div>
+    {% endif %}
     {% csrf_token %}
     <div class="form-row">
         <div class="form-group col-md-6">

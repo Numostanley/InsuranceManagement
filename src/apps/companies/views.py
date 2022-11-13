@@ -24,7 +24,7 @@ def create_company(request):
             form.save()
             company = Company.get_company_by_name(form.data["name"])
             messages.success(request, f'{form.data["name"]} is successfully created!')
-            return redirect(reverse('users:sign-up') + f'?group=Company User&company_id={company.id}')
+            return redirect(reverse('users:sign-up') + f'?group={COMPANY_USER}&company_id={company.id}')
         return render(request, 'companies/create_company.html')
     else:
         form = CreateCompanyForm()
