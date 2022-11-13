@@ -1,0 +1,56 @@
+{% extends 'risk-assessment/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            a:link {
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <h2 style="text-align:center; color:blue;">ASSESS POLICY</h2>
+    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;"
+          action="{% url 'risk-assessment:create' %}">
+        {% if message %}
+            <div class="container">
+                <span class="alert alert-danger" role="alert">{{ message }}</span>
+            </div>
+        {% endif %}
+        {% csrf_token %}
+        <div class="form-group">
+
+            <label for="type">Assessment Type</label>
+            <select name="type" id="type" class="form-control">
+                <option value="Catastrophic risk<">Catastrophic risk</option>
+                <option value="Morbidity rates">Morbidity rates</option>
+                <option value="Mortality Rates">Mortality Rates</option>
+            </select>
+
+            <label for="level">Assessment Level</label>
+            <select name="level" id="level" class="form-control">
+                <option value="High">High</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+            </select>
+
+            <label for="assessment">Assessment</label>
+            <textarea name="assessment" class="form-control"
+                      id="assessment"></textarea>
+            <input name="policy_id" value="{{ policy_id }}" hidden>
+
+        </div>
+
+
+        <br>
+        <button type="submit" class="btn btn-primary">ADD</button>
+    </form>
+    <br><br><br><br>
+{% endblock content %}
