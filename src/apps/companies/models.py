@@ -1,12 +1,11 @@
 from django.db import models
 from django.utils import timezone
-from apps.users.models import User
-
 from apps import helpers
+from apps.users.models import User
 
 
 class Company(models.Model):
-    user = models.OneToOneField(User, related_name='company', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='company', on_delete=models.CASCADE, default=None, null=True)
     name = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     contact = models.CharField(max_length=50, unique=True)
@@ -44,7 +43,31 @@ class Company(models.Model):
             return None
 
     @staticmethod
-    def delete_company_by_id(id):
+    def get_company_by_email(email: str):
+        """retrieve company by email"""
+        try:
+            return Company.objects.get(email=email)
+        except Company.DoesNotExist:
+            return None
+
+    @staticmethod
+    def get_company_by_website(website: str):
+        """retrieve company by website"""
+        try:
+            return Company.objects.get(website=website)
+        except Company.DoesNotExist:
+            return None
+
+    @staticmethod
+    def get_company_by_contact(contact: str):
+        """retrieve company by contact"""
+        try:
+            return Company.objects.get(contact=contact)
+        except Company.DoesNotExist:
+            return None
+
+    @staticmethod
+    def delete_company_by_id(id: str):
         """retrieve company by name"""
         try:
             company = Company.get_company_by_id(id)

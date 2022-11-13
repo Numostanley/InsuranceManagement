@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for policy in policies %}
+        <p>{{ policy.category }}</p>
+        <p>{{ policy.policy_name }}</p>
+        <p>{{ policy.sum_assurance }}</p>
+        <p>{{ policy.premium }}</p>
+        <p>{{ policy.tenure }}</p>
+    {% endfor %}
+{% endblock %}

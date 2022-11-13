@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% for policy_record in policy_records %}
+        <p>{{ policy_record.policy }}</p>
+        <p>{{ policy_record.status }}</p>
+    {% endfor %}
+{% endblock %}
