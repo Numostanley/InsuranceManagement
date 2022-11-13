@@ -12,6 +12,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse, JsonResponse
 from docusign_esign import RecipientViewRequest, EnvelopeDefinition, Document, Signer, SignHere, Tabs, Recipients, ApiClient, EnvelopesApi, Text, DateSigned
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework import status
 
 from core.settings.base import BASE_DIR, client_user_id, account_id
@@ -24,6 +25,7 @@ def create_jwt_grant():
     logger.info('TOKEN', token)
     return token
 
+@api_view(['GET'])
 def docusign_signature(request):
     try:
         token = create_jwt_grant()
@@ -47,7 +49,7 @@ def docusign_signature(request):
             prefix, envelope_string = url.split('v1/')
             envelope_id, suffix = envelope_string.split('?')
        
-        return JsonResponse({
+        return Response({
             'docsign_url': url,
             'envelope_id': envelope_id,
             'message': 'Docusign',
@@ -55,7 +57,7 @@ def docusign_signature(request):
         }, status=status.HTTP_200_OK)
     
     except Exception as e:
-        return JsonResponse({
+        return Response({
             'docsign_url': '',
             'envelope_id': '',
             'message': 'Internal server error',
@@ -154,7 +156,7 @@ def signature_by_embedded(token, base64_file_content, signer_name, signer_email,
             authentication_method = 'email',
             client_user_id = client_user_id,
             recipient_id = '1',
-            return_url = f'http://{domain}/signature/signed_completed/', # Your redirected URL
+            return_url = f'http://{domain}/signatures/signed_completed/', # Your redirected URL
             user_name = signer_name,
             email = signer_email
         )
@@ -187,7 +189,7 @@ def get_envelope_status(request, envelope_id):
     response = r.json()
     logger.info('response: %s', response)
     
-    return JsonResponse({
+    return Response({
         'response': response,
         'error': ''
     }, status=status.HTTP_200_OK)

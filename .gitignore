@@ -153,3 +153,8 @@ deploy.sh
 
 # docusign private_key
 docusign.pem
+
+# migration files
+0001_initial.py
+0002_initial.py
+0003_initial.py
