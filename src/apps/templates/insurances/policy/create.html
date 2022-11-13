@@ -1,0 +1,58 @@
+{% extends 'companies/comp-base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            a:link {
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <h2 style="text-align:center; color:blue;">ADD POLICY</h2>
+    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;"
+          action="{% url 'insurances:polices:create' %}">
+        {% if message %}
+            <div class="container">
+                <span class="alert alert-danger" role="alert">{{ message }}</span>
+            </div>
+        {% endif %}
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select name="category_id" id="category" class="form-control">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+
+            </select>
+
+            <label for="name">Policy Name</label>
+            <input name="name" class="form-control" placeholder="Policy Name" type="text" id="name">
+
+            <label for="sum_Assurance">Sum Assurance</label>
+            <input name="sum_assurance" class="form-control" placeholder="Sum Assurance" type="number"
+                   id="sum_Assurance">
+
+            <label for="premium">Premium</label>
+            <input name="premium" class="form-control" placeholder="Premium" type="number" id="premium">
+
+            <label for="tenure">Tenure</label>
+            <input name="tenure" class="form-control" placeholder="Tenure" type="number" id="tenure" max="12">
+
+
+        </div>
+
+
+        <br>
+        <button type="submit" class="btn btn-primary">ADD</button>
+    </form>
+    <br><br><br><br>
+{% endblock content %}
