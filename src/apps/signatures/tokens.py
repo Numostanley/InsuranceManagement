@@ -15,7 +15,7 @@ def docusign_token():
         "scope":"signature"
     }
     
-    with open('private_key.pem', "rb") as key_file:
+    with open('docusign.pem', "rb") as key_file:
        private_key = crypto_serialization.load_pem_private_key(key_file.read(), password=None)
        
     key = private_key.private_bytes(crypto_serialization.Encoding.PEM, crypto_serialization.PrivateFormat.PKCS8, crypto_serialization.NoEncryption())
