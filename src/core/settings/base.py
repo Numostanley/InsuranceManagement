@@ -49,7 +49,7 @@ SECRET_KEY = env_config['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_config['DEBUG']
 
-ALLOWED_HOSTS = ['141.147.139.68']
+ALLOWED_HOSTS = ['141.147.139.68', 'localhost']
 
 # Application definition
 
@@ -73,6 +73,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -178,3 +179,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'from@gmail.com'
 EMAIL_HOST_PASSWORD = 'xyz'
 EMAIL_RECEIVING_USER = ['to@gmail.com']
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
