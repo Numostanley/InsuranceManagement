@@ -1,9 +1,12 @@
-from django.contrib.auth.decorators import login_required
-
-from apps.insurances.models import Policy, PolicyRecord, Category
-from django.shortcuts import render, redirect
 from uuid import UUID
+
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse
+from django.shortcuts import render, redirect
+
 from apps.decorators import authorize
+from apps.helpers import PDFGenerator
+from apps.insurances.models import Policy, PolicyRecord, Category
 from apps.users.models import User
 from apps.users.views import ADMIN, COMPANY_USER, CUSTOMER
 
@@ -123,3 +126,21 @@ def details(request, policy_id: UUID):
         return render(request, "", {})
     except (Policy.DoesNotExist, Policy.MultipleObjectsReturned) as e:
         return render(request, "", {})
+
+
+@login_required
+@authorize([ADMIN, CUSTOMER])
+def generate_policy_report(request):
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            try:
+                pdf = PDFGenerator()
+                file_path = pdf.return_pdf_file_path()
+                return FileResponse(open(file_path, 'rb'),
+                                    as_attachment=True,
+                                    filename=pdf.return_file_name())
+            except FileNotFoundError:
+                return render(request, '404.html')
+            finally:
+                pdf.delete_pdf()
+    return render(request, '401.html')

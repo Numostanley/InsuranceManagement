@@ -55,9 +55,9 @@ class AbstractBasePDFGenerator(ABC):
 
 
 class PDFGenerator(AbstractBasePDFGenerator):
-    def __init__(self, data, username: str):
-        self.data = data
-        self.username = username
+    def __init__(self):
+        self.data = 'data'
+        self.username = 'Admin Customer'
 
     def get_parent_directory(self):
         parent_directory = Path(__file__).resolve().parent
@@ -82,9 +82,16 @@ class PDFGenerator(AbstractBasePDFGenerator):
         current_date = datetime.now()
 
         context = {
-            'date': current_date.strftime('%Y-%m-%d'),
+            'current_date': current_date.strftime('%Y-%m-%d'),
             'data': self.data,
-            'username': self.username
+            'username': self.username,
+            'company': 'Alhimaya',
+            'category': 'Health',
+            'policy': 'Health Insurance',
+            'sum_assurance': 20000,
+            'tenure': 4,
+            'premium': 3,
+            'policy_status': 'Approved'
         }
         stringify_context = self.get_template().render(context)
         html = weasyprint.HTML(string=stringify_context)
@@ -93,15 +100,23 @@ class PDFGenerator(AbstractBasePDFGenerator):
     def generate_pdf(self):
         html = self.stringify_context()
 
-        #generate PDF
-        return html.write_pdf(f'file_downloads/{self.username}', stylesheets=[self.locate_static()])
+        # generate PDF
+        return html.write_pdf(f'file_downloads/{self.username}.pdf', stylesheets=[self.locate_static()])
 
     def return_pdf_file_path(self):
         root_dir = self.get_parent_directory().parent
 
+        # create the file_downloads/ directory
         Path('file_downloads/').mkdir(exist_ok=True, parents=True)
+
+        # generate PDF
+        self.generate_pdf()
+
         file_name = f'{root_dir}/file_downloads/{self.username}.pdf'
         return file_name
+
+    def return_file_name(self):
+        return self.return_pdf_file_path().split('/')[-1]
 
     def delete_pdf(self):
         """delete pdf file after download"""

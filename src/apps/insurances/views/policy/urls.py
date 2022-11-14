@@ -10,5 +10,6 @@ urlpatterns = [
     path("update/<uuid:id>", view.update, name="update"),
     path("details/<uuid:id>", view.details, name="policy-details"),
     path("apply", view.apply, name="apply"),
-    path("home", view.home, name="home")
+    path("home", view.home, name="home"),
+    path("generate-pdf", view.generate_policy_report, name="generate-pdf"),
 ]
