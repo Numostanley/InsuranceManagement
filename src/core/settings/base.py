@@ -49,7 +49,7 @@ SECRET_KEY = env_config['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_config['DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['141.147.139.68']
 
 # Application definition
 
@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     "apps.reviews",
     "apps.users",
     "crispy_forms",
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
+    "apps.risk_assessment"
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,7 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_REDIRECT_URL = '/afterlogin'
+LOGIN_URL = "/users/signin"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

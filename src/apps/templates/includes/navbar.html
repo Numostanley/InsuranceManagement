@@ -32,33 +32,35 @@
 
 
 <div class="bs-example">
-    <nav class="navbar navbar-expand-md  navbar-dark fixed-top" style="background-color: #000000;">
-        <a style="color: #ffffff;text-decoration: none; " href="/apps/static"><font face="Gill" size=" 5">Insurance Management
-            System</font><br/></a>
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-            <div class="navbar-nav">
-                <p style="
+    <div class="mt-5">
+        <nav class="navbar navbar-expand-md  navbar-dark fixed-top" style="background-color: #000000;">
+            <a style="color: #ffffff;text-decoration: none; " href="/apps/static"><font face="Gill" size=" 5">Insurance
+                Management
+                System</font><br/></a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav">
+                    <p style="
           padding-left: 15px;
       " class="nav-item nav-link active"></p>
 
-                <a href="{% url 'users:sign-up' %}" class="nav-item nav-link">Sign Up</a>
-                <a href="{% url 'users:sign-in' %}" class="nav-item nav-link">Sign In</a>
-                <a href="{% url 'companies:create' %}" class="nav-item nav-link">Register Company</a>
+                    <a href="{% url 'users:pre-login' %}" class="nav-item nav-link">Sign Up</a>
+                    <a href="{% url 'users:sign-in' %}" class="nav-item nav-link">Sign In</a>
+                    <a href="{% url 'companies:create' %}" class="nav-item nav-link">Register Company</a>
+                </div>
+
+                <div class="navbar-nav">
+                    <a href="/aboutus" class="nav-item nav-link">About Us</a>
+                    <a href="/contactus" class="nav-item nav-link">Contact Us</a>
+
+                </div>
+
+
             </div>
-
-            <div class="navbar-nav">
-                <a href="/aboutus" class="nav-item nav-link">About Us</a>
-                <a href="/contactus" class="nav-item nav-link">Contact Us</a>
-
-            </div>
-
-
-        </div>
-    </nav>
+        </nav>
+    </div>
 </div>
 
 

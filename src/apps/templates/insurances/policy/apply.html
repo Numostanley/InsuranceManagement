@@ -52,11 +52,12 @@
                     <th> Premium</th>
                     <th> Tenure</th>
                     <th> Creation Date</th>
+                    <th>Assessment Risks</th>
                     <th> Apply</th>
 
                 </tr>
                 </thead>
-                {% for t in policies %}
+                {% for t in polices %}
                     <tr>
                         <td> {{ forloop.counter }}</td>
                         <td> {{ t.name }}</td>
@@ -65,6 +66,7 @@
                         <td> {{ t.premium }}</td>
                         <td> {{ t.tenure }}</td>
                         <td>{{ t.creation_date }}</td>
+                        <td><a class="btn btn-danger btn-xs" href="{% url 'risk-assessment:risk-policy' t.id %}">View</a></td>
                         <td><a class="btn btn-danger btn-xs" href="{% url 'insurances:records:create' t.id %}">Apply</a></td>
                     </tr>
                 {% endfor %}
@@ -73,4 +75,5 @@
     </div>
 
     <br><br><br><br><br><br>
+    <script src="{% static 'chatbot_script.js' %}" type="text/javascript"></script>
 {% endblock content %}

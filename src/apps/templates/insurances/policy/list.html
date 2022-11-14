@@ -33,12 +33,12 @@
                 <tr>
                     <th>Serial No.</th>
                     <th>Policy Name</th>
-                    {#          <th> Category</th>#}
+                    <th> Category</th>
                     <th> Sum Assurance</th>
                     <th> Premium</th>
                     <th> Tenure</th>
                     <th> Creation Date</th>
-                    {#          <th> Company name</th>#}
+                    <th> Company name</th>
                     {% if not group == "Admin" %}
                         <th>Update</th>
                     {% endif %}
@@ -48,13 +48,14 @@
                     <tr>
                         <td> {{ forloop.counter }}</td>
                         <td> {{ policy.name }}</td>
-                        {#        <td> {{policy.category}}</td>#}
+                        <td> {{ policy.category }}</td>
                         <td> {{ policy.sum_assurance }}</td>
                         <td> {{ policy.premium }}</td>
                         <td> {{ policy.tenure }}</td>
                         <td>{{ policy.creation_date }}</td>
+                        <td>{{ policy.company }}</td>
                         {% if not group == "Admin" %}
-                            <td><a class="btn btn-danger btn-xs" href="{% url 'policy-update' policy.id %}"><span
+                            <td><a class="btn btn-danger btn-xs" href="{% url 'insurances:polices:update' policy.id %}"><span
                                     class="glyphicon glyphicon-edit"></span></a></td>
                         {% endif %}
 
@@ -63,6 +64,7 @@
             </table>
         </div>
     </div>
+    <script src="{% static 'chatbot_script.js' %}" type="text/javascript"></script>
 
     <br><br><br><br><br><br>
 {% endblock content %}

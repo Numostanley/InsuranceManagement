@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
+{% include "includes/navbar.html" %}
 <head>
     <title>{{ title }}</title>
 </head>
 <style>
-        .xyz{
-          margin-bottom: 0px;
-          background-image: url('{% static "image/homepage.jpg" %}');
-          background-size: cover;
-          background-repeat: no-repeat;
-        }
+    .xyz {
+        margin-bottom: 0px;
+        background-image: url('{% static "images/homepage.jpg" %}');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
 </style>
-<body>
-  {% include "includes/navbar.html" %}
-<br>
-<section id="section-jumbotron" style="margin-bottom: 0px;" class="jumbotron jumbotron-fluid d-flex justify-content-center align-items-center xyz">
-  <div class="container text-center">
-      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-  </div>
+<body>
+
+<br>
+<section id="section-jumbotron" style="margin-bottom: 0px;"
+         class="jumbotron jumbotron-fluid d-flex justify-content-center align-items-center xyz">
+    <div class="container text-center">
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </div>
 </section>
 
 
 <div class="jumbotron" style="margin-top: 0px;margin-bottom: 0px;">
 
-  <p class="lead text-center"> “Whole life does two things for you: Protects your family and allows you to save for your future.”
+    <p class="lead text-center"> “Whole life does two things for you: Protects your family and allows you to save for
+        your future.”
     </p>
 
-  <p class="text-center">- Dinara</p>
+    <p class="text-center">- Dinara</p>
 
 </div>
-
-
+<div id="google_translate_element"></div>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+</script>
+<script src="{% static 'chatbot_script.js' %}" type="text/javascript"></script>
+<script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>

@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("apps.main.urls", namespace="main")),
@@ -24,4 +23,5 @@ urlpatterns = [
     path("users/", include("apps.users.urls", namespace="users")),
     path("insurances/", include("apps.insurances.urls", namespace="insurances")),
     path("reviews/", include("apps.reviews.urls", namespace="reviews")),
+    path("risk-assessment/", include("apps.risk_assessment.urls", namespace="risk-assessment")),
 ]

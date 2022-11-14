@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+{% load widget_tweaks %}
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        form {
+            margin: 50px;
+
+        }
+
+    </style>
+    <title>Sign Up</title>
+</head>
+<body>
+{% include "includes/navbar.html" %}
+
+
+<br><br><br>
+<h3 style="text-align: center;color: red;">Company User SignUp</h3>
+<form method="POST" autocomplete="off" enctype="multipart/form-data" action="{% url 'users:sign-up' %}">
+    {% if message %}
+        <div class="container">
+            <span class="alert alert-danger" role="alert">{{ message }}</span>
+        </div>
+    {% endif %}
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="username">Username</label>
+            <input name="username" id="username" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input name="email" id="email" class="form-control" type="email">
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="first_name">First Name</label>
+            <input name="first_name" id="first_name" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="last_name">Last Name</label>
+            <input name="last_name" id="last_name" class="form-control">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="mobile">Mobile</label>
+            <input name="phone_number" id="mobile" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="address">Address</label>
+            <input name="location" id="address" class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Password</label>
+            <input name="password" id="first_name" class="form-control" type="password">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Confirm Password</label>
+            <input name="confirm_password" id="first_name" class="form-control" type="password">
+        </div>
+    </div>
+
+    <input name="group" hidden value="{{ group }}">
+    <input name="company_id" hidden value="{{ company_id }}">
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+</form>
+
+
+<br><br>
+</body>
+</html>
