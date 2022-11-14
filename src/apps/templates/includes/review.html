@@ -1,0 +1,9 @@
+{% load crispy_forms_tags %}
+
+<form action="{% url 'reviews:create' company_id=company_id %}" method="POST" class="review-form">
+    {% csrf_token %}
+    {{ review_form|crispy }}
+    <button type="submit">
+        Confirm
+    </button>
+</form>

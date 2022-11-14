@@ -10,7 +10,7 @@ class ReviewForm(forms.ModelForm):
         fields = ['comment', 'rating']
 
         widgets = {
-            'text': forms.Textarea(
+            'comment': forms.Textarea(
                 attrs={
                     'class': 'form-control shadow px-2',
                     'rows': 6

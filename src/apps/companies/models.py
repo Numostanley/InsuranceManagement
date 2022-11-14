@@ -75,3 +75,8 @@ class Company(models.Model):
             return company
         except Company.DoesNotExist:
             return None
+
+    def get_total_ratings(self):
+        total_ratings = sum([review.rating for review in self.reviews.all()])
+        avg = total_ratings / self.reviews.count()
+        return round(avg, 2)

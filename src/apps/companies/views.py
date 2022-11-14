@@ -51,26 +51,8 @@ def company_detail(request, id: str):
     if not company:
         return render(request, '404.html')
 
-    if request.method == 'POST':
-        if not request.user.is_authenticated:
-            messages.info(request, f'Login to send a review!')
-            return redirect('user:login')
-        if request.user.id == company.user.id:
-            messages.error(request, f'You cannot review your own company!')
-            return redirect('companies:detail', id)
-
-        review_form = ReviewForm(request.POST)
-        if review_form.is_valid():
-            cd = review_form.cleaned_data
-            rating = cd['rating']
-            comment = cd['comment'] if cd['comment'] else ""
-
-            Review.create_review(company, request.user, rating, comment)
-            messages.success(request, f'Your review has been sent!')
-            return redirect('companies:detail')
-    else:
-        review_form = ReviewForm()
     context = {
+        'company_id': company.id,
         'name': company.name,
         'website': company.website,
         'email': company.email,
@@ -79,7 +61,7 @@ def company_detail(request, id: str):
         'location': company.location,
         'date_created': company.date_created,
         'title': f'{company.name} Detail',
-        'review_form': review_form
+        'rating': company.get_total_ratings(),
     }
 
     return render(request, 'companies/company_detail.html', context)

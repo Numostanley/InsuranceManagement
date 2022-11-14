@@ -1,4 +1,111 @@
+from abc import ABC, abstractmethod
 from datetime import datetime
+from pathlib import Path
+
+import weasyprint
+from jinja2 import Environment, FileSystemLoader
+
+
+class AbstractBasePDFGenerator(ABC):
+    """abstract base class for PDFGenerator"""
+
+    @abstractmethod
+    def get_parent_directory(self):
+        """retrieve parent directory"""
+        pass
+
+    @abstractmethod
+    def locate_template_path(self):
+        """locate the template path"""
+        pass
+
+    @abstractmethod
+    def locate_static(self):
+        """locate the static path and file"""
+        pass
+
+    @abstractmethod
+    def load_template_path(self):
+        """load the template path with jinja2"""
+        pass
+
+    @abstractmethod
+    def get_template(self):
+        """retrieve the template file"""
+        pass
+
+    @abstractmethod
+    def stringify_context(self):
+        """stringify the context and load it in weasyprint for rendering"""
+        pass
+
+    @abstractmethod
+    def generate_pdf(self):
+        """generate pdf from context"""
+        pass
+
+    @abstractmethod
+    def return_pdf_file_path(self):
+        pass
+
+    @abstractmethod
+    def delete_pdf(self):
+        """delete PDF"""
+        pass
+
+
+class PDFGenerator(AbstractBasePDFGenerator):
+    def __init__(self, data, username: str):
+        self.data = data
+        self.username = username
+
+    def get_parent_directory(self):
+        parent_directory = Path(__file__).resolve().parent
+        return parent_directory
+
+    def locate_template_path(self):
+        template_path = f'{self.get_parent_directory()}/templates/pdf'
+        return template_path
+
+    def locate_static(self):
+        static_path = f'{self.get_parent_directory()}/templates/pdf/pdf.css'
+        return static_path
+
+    def load_template_path(self):
+        template_path = self.locate_template_path()
+        return Environment(loader=FileSystemLoader(template_path))
+
+    def get_template(self):
+        return self.load_template_path().get_template('pdf.html')
+
+    def stringify_context(self):
+        current_date = datetime.now()
+
+        context = {
+            'date': current_date.strftime('%Y-%m-%d'),
+            'data': self.data,
+            'username': self.username
+        }
+        stringify_context = self.get_template().render(context)
+        html = weasyprint.HTML(string=stringify_context)
+        return html
+
+    def generate_pdf(self):
+        html = self.stringify_context()
+
+        #generate PDF
+        return html.write_pdf(f'file_downloads/{self.username}', stylesheets=[self.locate_static()])
+
+    def return_pdf_file_path(self):
+        root_dir = self.get_parent_directory().parent
+
+        Path('file_downloads/').mkdir(exist_ok=True, parents=True)
+        file_name = f'{root_dir}/file_downloads/{self.username}.pdf'
+        return file_name
+
+    def delete_pdf(self):
+        """delete pdf file after download"""
+        Path(f'{self.return_pdf_file_path()}').unlink(missing_ok=True)
 
 
 def save_company_image(instance, filename):

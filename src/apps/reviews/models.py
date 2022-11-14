@@ -24,7 +24,7 @@ class Review(models.Model):
     class Meta:
         ordering = ['-date_created']
         constraints = [
-            models.UniqueConstraint(name="const", fields=['company', 'reviewer'])
+            models.UniqueConstraint(name="company_reviewer", fields=['company', 'reviewer'])
         ]
 
     @staticmethod
