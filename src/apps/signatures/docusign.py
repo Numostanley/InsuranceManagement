@@ -10,7 +10,7 @@ import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse, JsonResponse
-from docusign_esign import RecipientViewRequest, EnvelopeDefinition, Document, Signer, SignHere, Tabs, Recipients, ApiClient, EnvelopesApi, Text, DateSigned
+from docusign_esign import RecipientViewRequest, EnvelopeDefinition, Document, Signer, SignHere, Tabs, Recipients, ApiClient, EnvelopesApi, Text, DateSigned, CarbonCopy
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -45,10 +45,14 @@ def docusign_signature(request):
         
         if signer_type == 'embedded':
             domain = get_current_site(request)
-            url = signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain)
-            prefix, envelope_string = url.split('v1/')
-            envelope_id, suffix = envelope_string.split('?')
-       
+            result = signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain)
+            url = result[0]
+            envelope_id = result[1]
+            
+        elif signer_type == 'email':
+            envelope_id = signature_by_email(token, base64_file_content, signer_name, signer_email)
+            url = ''
+            
         return Response({
             'docsign_url': url,
             'envelope_id': envelope_id,
@@ -63,6 +67,117 @@ def docusign_signature(request):
             'message': 'Internal server error',
             'error': 'In docusign_signature: '+str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+def signature_by_email(token, base64_file_content, signer_name, signer_email):
+    try:
+        # Create the document model
+        document = Document( # create the DocuSign document object
+            document_base64 = base64_file_content,
+            name = 'scan', # this is just a sample name. name can be something else
+            file_extension = 'pdf', # other document types arre accepted
+            document_id = '1'
+        )
+        
+        sign_here = SignHere(
+            document_id = '1',
+            page_number = '1',
+            recepient_id = '1',
+            tab_label = 'SignHereTab',
+            y_position = '513',
+            x_position = '80'
+        )
+        
+        today = date.today()
+        current_date = today.strftime("%d/%m/%Y")
+        sign_date = DateSigned(
+            document_id = '1',
+            page_number = '1',
+            recipient_id = '1',
+            tab_label = 'Date',
+            font = 'helvetica',
+            bold = "true",
+            value = current_date,
+            tab_id = "date",
+            font_size = "size16",
+            y_position = "55",
+            x_position = "650"
+        )
+        
+        text_name = Text(
+            document_id = '1',
+            page_number = '1',
+            recipient_id = '1',
+            tab_label = 'Name',
+            font = 'helvetica',
+            bold = "true",
+            value = signer_name,
+            tab_id = "name",
+            font_size = "size16",
+            y_position = "280",
+            x_position = "54"
+        )
+        
+        text_email = Text(
+            document_id = '1',
+            page_number = '1',
+            recipient_id = '1',
+            tab_label = 'Email',
+            font = 'helvetica',
+            bold = "true",
+            value = signer_email,
+            tab_id = "email",
+            font_size = "size16",
+            y_position = "304",
+            x_position = "82"
+        )
+        
+        signer_tab = Tabs(sign_here_tabs=[sign_here], text_tabs=[text_name, text_email, sign_date])
+        signer = Signer(
+            email = signer_email, name = signer_name, recipient_id = '1', routing_order = '1', 
+            client_user_id = client_user_id, tabs = signer_tab
+        )
+        
+        # create a cc recipient to receive a copy of the documents
+        ccl = CarbonCopy(
+            email=signer_email,
+            name=signer_name,
+            recipient_id='2',
+            routing_order='2'
+        )
+        
+        # Next, create the top level envelope definition and populate it.
+        envelope_definition = EnvelopeDefinition(
+            email_subject = "Please sign this document",
+            documents = [document],
+            # The Recipients object wants arrays for each recipient type
+            recipients = Recipients(signers=[signer], carbon_copies=[ccl]),
+            status = "sent" # requests that the envelope be created and sent.
+        )
+        try:
+            #STEP-2 create/send eenvelope
+            api_client = ApiClient()
+            api_client.host = "https://demo.docusign.net/restapi"
+            api_client.set_default_header('Authorization', 'Bearer ' + token['access_token'])
+            
+            envelope_api = EnvelopesApi(api_client)
+            results = envelope_api.create_envelope(account_id=account_id, envelope_definition=envelope_definition)
+            envelope_id = results.envelope_id
+            return envelope_id
+        
+        except Exception as e:
+            return JsonResponse({
+            'docsign_url': '',
+            'message' : 'Internal server error',
+            'error': 'In signature by embedded: '+str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+    except Exception as e:
+        return JsonResponse({
+            'docsign_url': '',
+            'message' : 'Internal server error',
+            'error': 'In signature by embedded: '+str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
 def signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain):
     try:
@@ -164,7 +279,7 @@ def signature_by_embedded(token, base64_file_content, signer_name, signer_email,
         # Obtain the recipient view url for the signing ceremony
         # Exceptions will be caught by the calling function
         results = envelope_api.create_recipient_view(account_id, envelope_id, recipient_view_request = recipient_view_request)
-        return results.url
+        return [results.url, envelope_id]
     
     except Exception as e:
         return JsonResponse({
