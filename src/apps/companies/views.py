@@ -41,7 +41,7 @@ def all_companies(request):
         'companies': companies,
         'title': 'All Companies'
     }
-    return render(request, 'companies/all_companies.html', context)
+    return render(request, 'admin-app/company-list.html', context)
 
 
 def company_detail(request, id: str):

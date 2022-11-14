@@ -35,12 +35,18 @@ def update(request, id: UUID, status: str):
 @authorize([ADMIN, COMPANY_USER, CUSTOMER])
 def list(request, status: str):
     user: User = request.user
-    group_name = user.get_group_name()
+
     base_template = "admin-app/base.html"
     records = PolicyRecord.objects.only("policy", "status",
-                                        "user", "creation_date", "id")
+                                        "user", "creation_date", "id").all()
     if not status.lower() == "All".lower():
-        records.filter(status=status)
+        PolicyRecord.objects.filter(status__iexact=status)
+    page = "insurances/policy_record/view-all.html" if status.lower() == "All".lower() \
+        else "insurances/policy_record/list-status.html"
+    if request.user.is_superuser:
+        return render(request, page,
+                      {"group": "Admin", "base_template": base_template, "records": records})
+    group_name = user.get_group_name()
     if group_name == COMPANY_USER:
         company_id = request.user.company.id
         records.filter(policy__company_id=company_id)

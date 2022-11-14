@@ -1,0 +1,59 @@
+{% extends "admin-app/base.html" %}
+{% block content %}
+    {% load static %}
+
+    <head>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"
+              id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+        <style media="screen">
+            a:link {
+                text-decoration: none;
+            }
+
+            h6 {
+                text-align: center;
+            }
+
+            .row {
+                margin: 100px;
+            }
+        </style>
+    </head>
+    <br><br>
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title">Company List</h6>
+            </div>
+            <table class="table table-hover" id="dev-table">
+                <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Email</th>
+                    <th>Location</th>
+                    <th>Websites</th>
+                </tr>
+                </thead>
+                {% for company in companies %}
+                    <tr>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ company.name}}</td>
+                        <td> {{ company.user }}</td>
+                        <td>{{ company.email }}</td>
+                        <td>{{ company.location }}</td>
+                        <td>{{ company.website }}</td>
+
+
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <br><br><br><br><br><br>
+{% endblock content %}

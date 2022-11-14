@@ -24,14 +24,14 @@ def home(request):
     if group_name == ADMIN:
         total_application = PolicyRecord.objects.all().count()
         total_approved = PolicyRecord.objects.filter(status="Approved").count()
-        total_disapproved = PolicyRecord.objects.filter(status="DisApproved").count()
+        total_disapproved = PolicyRecord.objects.filter(status="Rejected").count()
         total_pending = PolicyRecord.objects.filter(status="Pending").count()
 
     elif group_name == COMPANY_USER:
         company_id = request.user.company.id
         total_application = PolicyRecord.objects.filter(policy__company_id=company_id).count()
         total_approved = PolicyRecord.objects.filter(status="Approved").count()
-        total_disapproved = PolicyRecord.objects.filter(status="DisApproved", policy__company_id=company_id).count()
+        total_disapproved = PolicyRecord.objects.filter(status="Rejected", policy__company_id=company_id).count()
         total_pending = PolicyRecord.objects.filter(status="Pending", policy__company_id=company_id).count()
         base_template = 'companies/comp-base.html'
     return render(request, "insurances/policy/home.html",
