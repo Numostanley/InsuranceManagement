@@ -37,20 +37,21 @@ def docusign_signature(request):
         signer_email = data['email']
         signer_name = data['full_name']
         signer_type = data['type']
+        username = data['username']
         
         # document that are to be signed
-        with open(os.path.join(BASE_DIR, 'docusign_file/', 'scan.pdf'), 'rb') as file: # Your docusignfile path
+        with open(os.path.join(BASE_DIR, 'file_downloads/', f'{username}.pdf'), 'rb') as file: # Your docusignfile path
             content_bytes = file.read()
         base64_file_content = base64.b64encode(content_bytes).decode('ascii')
         
         if signer_type == 'embedded':
             domain = get_current_site(request)
-            result = signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain)
+            result = signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain, username)
             url = result[0]
             envelope_id = result[1]
             
         elif signer_type == 'email':
-            envelope_id = signature_by_email(token, base64_file_content, signer_name, signer_email)
+            envelope_id = signature_by_email(token, base64_file_content, signer_name, signer_email, username)
             url = ''
             
         return Response({
@@ -68,12 +69,12 @@ def docusign_signature(request):
             'error': 'In docusign_signature: '+str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-def signature_by_email(token, base64_file_content, signer_name, signer_email):
+def signature_by_email(token, base64_file_content, signer_name, signer_email, username):
     try:
         # Create the document model
         document = Document( # create the DocuSign document object
             document_base64 = base64_file_content,
-            name = 'scan', # this is just a sample name. name can be something else
+            name = f'{username}', # name of the documment
             file_extension = 'pdf', # other document types arre accepted
             document_id = '1'
         )
@@ -179,12 +180,12 @@ def signature_by_email(token, base64_file_content, signer_name, signer_email):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     
-def signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain):
+def signature_by_embedded(token, base64_file_content, signer_name, signer_email, domain, username):
     try:
         # Create the document model
         document = Document( # create the DocuSign document object
             document_base64 = base64_file_content,
-            name = 'scan', # this is just a sample name. name can be something else
+            name = f'{username}', # name of the document
             file_extension = 'pdf', # other document types arre accepted
             document_id = '1'
         )
