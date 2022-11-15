@@ -182,6 +182,8 @@ EMAIL_HOST_USER = 'from@gmail.com'
 EMAIL_HOST_PASSWORD = 'xyz'
 EMAIL_RECEIVING_USER = ['to@gmail.com']
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Docusign
 CLIENT_AUTH_ID = env_config['CLIENT_AUTH_ID']
