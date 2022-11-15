@@ -22,6 +22,7 @@ urlpatterns = [
     path("companies/", include("apps.companies.urls", namespace="companies")),
     path("users/", include("apps.users.urls", namespace="users")),
     path("insurances/", include("apps.insurances.urls", namespace="insurances")),
+    path("reviews/", include("apps.reviews.urls", namespace="reviews")),
     path("risk-assessment/", include("apps.risk_assessment.urls", namespace="risk-assessment")),
     path("signatures/", include("apps.signatures.urls", namespace="signatures")),
 ]

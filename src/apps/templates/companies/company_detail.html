@@ -10,6 +10,8 @@
     <p>{{ photo }}</p>
     <p>{{ location }}</p>
     <p>{{ date_created }}</p>
+    <p>{{ rating }}</p>
+    {% include 'includes/review.html' with company_id={{ company_id }} %}
     <form method="post">
         {{ review_form }}
     </form>

@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, reverse
 
 from apps import decorators
-from apps.reviews.forms import Review, ReviewForm
 from .models import Company
 from .forms import CreateCompanyForm, UpdateCompanyForm
 from ..users.views import COMPANY_USER
@@ -41,7 +40,7 @@ def all_companies(request):
         'companies': companies,
         'title': 'All Companies'
     }
-    return render(request, 'companies/all_companies.html', context)
+    return render(request, 'admin-app/company-list.html', context)
 
 
 def company_detail(request, id: str):
@@ -50,26 +49,8 @@ def company_detail(request, id: str):
     if not company:
         return render(request, '404.html')
 
-    if request.method == 'POST':
-        if not request.user.is_authenticated:
-            messages.info(request, f'Login to send a review!')
-            return redirect('user:login')
-        if request.user.id == company.user.id:
-            messages.error(request, f'You cannot review your own company!')
-            return redirect('companies:detail', id)
-
-        review_form = ReviewForm(request.POST)
-        if review_form.is_valid():
-            cd = review_form.cleaned_data
-            rating = cd['rating']
-            comment = cd['comment'] if cd['comment'] else ""
-
-            Review.create_review(company, request.user, rating, comment)
-            messages.success(request, f'Your review has been sent!')
-            return redirect('companies:detail')
-    else:
-        review_form = ReviewForm()
     context = {
+        'company_id': company.id,
         'name': company.name,
         'website': company.website,
         'email': company.email,
@@ -78,7 +59,7 @@ def company_detail(request, id: str):
         'location': company.location,
         'date_created': company.date_created,
         'title': f'{company.name} Detail',
-        'review_form': review_form
+        'rating': company.get_total_ratings(),
     }
 
     return render(request, 'companies/company_detail.html', context)

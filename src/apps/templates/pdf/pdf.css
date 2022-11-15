@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+@page {
+    size: 315mm 445.5mm;
+}
+
+table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    float: right;
+    font-weight: bold;
+}
+
+hr {
+    color: #ffffff;
+}
+
+.title-header {
+    margin-bottom: 8px;
+}
+
+.sub-header {
+    margin-bottom: 8px;
+}

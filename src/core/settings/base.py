@@ -49,7 +49,7 @@ SECRET_KEY = env_config['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_config['DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['141.147.139.68']
 
 # Application definition
 
